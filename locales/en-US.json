@@ -1,0 +1,17 @@
+{
+  "general": {
+    "home": "Home",
+    "announcement": "Announcement",
+    "news": "News",
+    "contact": "Contact",
+    "category": "Category",
+    "product": "Product",
+    "product_found": "Product found",
+    "product_category": "Product Category"
+  },
+  "auth": {
+    "sign_in": "Sign In",
+    "sign_up": "Sign Up",
+    "sign_out": "Sign Out"
+  }
+}

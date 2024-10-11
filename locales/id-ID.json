@@ -1,0 +1,17 @@
+{
+  "general": {
+    "home": "Beranda",
+    "announcement": "Pemberitahuan",
+    "news": "Berita",
+    "contact": "Kontak",
+    "category": "Kategori",
+    "product": "Produk",
+    "product_found": "Produk ditemukan",
+    "product_category": "Kategori Produk"
+  },
+  "auth": {
+    "sign_in": "Login",
+    "sign_up": "Daftar",
+    "sign_out": "Keluar"
+  }
+}
