@@ -64,7 +64,7 @@ const links = useBreadcrumbItems({
     </div>
 
     <div v-if="isProduct">
-      <ProductMenu
+      <ProductCategoryMenu
         :category-slug="firstSlug!"
         :product-category-slug="lastSlug ?? ''"
       />
