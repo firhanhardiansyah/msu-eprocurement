@@ -3,7 +3,7 @@
 <template>
   <footer>
     <UDivider />
-    <div class="bg-primary-100">
+    <div class="bg-primary-100 dark:bg-black/20">
       <UContainer>
         <div class="flex flex-wrap md:gap-4 lg:gap-0 py-4">
           <div class="w-full md:w-full lg:w-1/3 flex flex-col gap-4">
@@ -29,7 +29,7 @@
               class="flex items-center justify-center flex-col md:flex-row md:gap-4 md:justify-start"
             >
               <div
-                class="flex items-center justify-center gap-1 text-slate-600 text-sm"
+                class="flex items-center justify-center gap-1 text-slate-600 text-sm dark:text-white"
               >
                 Get deliveries with
                 <span class="text-green-600 font-semibold"> eCatalog </span>
@@ -51,15 +51,17 @@
         </div>
       </UContainer>
     </div>
-    <div class="bg-primary-200">
+    <div class="bg-primary-200 dark:bg-black/50">
       <UContainer>
         <div class="py-8 w-full">
-          <p class="text-sm text-slate-500">
+          <p class="text-sm text-slate-500 dark:text-white">
             <span>© </span>
             <NuxtTime :datetime="Date.now()" year="numeric" />
-            <span class="text-green-600 font-semibold"> eCatalog</span>
+            <span class="text-green-600 font-semibold dark:text-green-400">
+              eCatalog</span
+            >
             <span> Powered by</span>
-            <span class="text-primary-600 font-semibold">
+            <span class="text-primary-600 font-semibold dark:text-green-400">
               PT. Magma Sigma Utama
             </span>
           </p>

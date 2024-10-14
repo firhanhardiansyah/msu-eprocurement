@@ -47,7 +47,7 @@ const announcements = [
         <div class="grid grid-cols-1 gap-4">
           <!-- Pemberitahuan Tenders -->
           <UCard class="cursor-pointer" v-for="announcement in announcements">
-            <article class="prose prose-gray">
+            <article class="prose prose-gray dark:prose-invert">
               <h4>{{ announcement.date }}</h4>
               <p class="text-base lowercase">
                 {{ announcement.description }}
@@ -67,14 +67,14 @@ const announcements = [
       <div class="basis-0 lg:basis-1/4 mt-4 lg:mt-0">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
           <UCard class="cursor-pointer">
-            <article class="prose prose-slate">
+            <article class="prose prose-slate dark:prose-invert">
               <h2>Berita</h2>
               <h4>06 Desember 2022</h4>
               <p class="text-base">Survey kepuasan vendor dan vendor award</p>
             </article>
           </UCard>
           <UCard>
-            <article class="prose prose-slate">
+            <article class="prose prose-slate dark:prose-invert">
               <h2>Himbauan</h2>
               <p class="text-base">
                 PT Magma Sigma Utama (MSU) tidak pernah memungut biaya atau

@@ -3,6 +3,8 @@ definePageMeta({
   layout: false,
 });
 
+const { t } = useI18n();
+
 const {
   getFirstElement,
   slugOverride,
@@ -35,6 +37,11 @@ if (slug.length <= 2) {
 const breadcrumbItemOverides = computed(() => {
   const items: any[] = [undefined];
 
+  items.push({
+    label: t("general.product_category"),
+    to: "/category",
+  });
+
   slug.map((url_slug, index) => {
     let goToPage = "";
 
@@ -59,11 +66,8 @@ const breadcrumbItemOverides = computed(() => {
   return items;
 });
 
-console.log(slug);
-
 const links = useBreadcrumbItems({
   overrides: breadcrumbItemOverides.value,
-  hideCurrent: true,
 });
 
 const {
@@ -128,9 +132,11 @@ const qtyProduct = ref<number>(1);
 
 const subTotal = (): string => {
   const amount = productData?.value?.data?.standard_price ?? 0;
-
   return currencyFormat(qtyProduct.value * amount);
 };
+
+// Cart
+const { addToCart, cart } = useCart();
 </script>
 
 <template>
@@ -222,7 +228,12 @@ const subTotal = (): string => {
                   <span class="">Sub Total</span>
                   <span class="font-bold text-xl">{{ subTotal() }}</span>
                 </div>
-                <UButton label="+ Keranjang" size="lg" block />
+                <UButton
+                  label="+ Keranjang"
+                  size="lg"
+                  block
+                  @click="addToCart(productData?.data!, qtyProduct)"
+                />
               </div>
             </div>
           </div>

@@ -24,6 +24,7 @@ onMounted(() => {
         <div class="flex flex-1 justify-end gap-2 py-2">
           <MainHeaderSearch />
           <MainHeaderShoppingCart />
+          <UiDarkMode />
           <MainHeaderUser />
           <MainHeaderSideBar />
         </div>

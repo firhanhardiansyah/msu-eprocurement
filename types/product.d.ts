@@ -45,6 +45,7 @@ interface Product {
   factor_inv?: number;
   seller_ids?: Seller[];
   url_slug?: string;
+  quantity: number = 0;
 }
 
 interface ProductData {

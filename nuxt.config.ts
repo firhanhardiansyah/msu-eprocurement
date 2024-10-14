@@ -2,12 +2,18 @@ import process from "node:process";
 
 const sw = process.env.SW === "true";
 
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-10-10",
 
   devtools: { enabled: true },
-  modules: ["@nuxt/ui", "@vite-pwa/nuxt", "@nuxt/image", "@nuxtjs/i18n", "@nuxtjs/seo", "nuxt-time"],
+  modules: [
+    "@nuxt/ui",
+    "@vite-pwa/nuxt",
+    "@nuxt/image",
+    "@nuxtjs/i18n",
+    "@nuxtjs/seo",
+    "nuxt-time",
+  ],
 
   // App Config
   app: {
@@ -26,8 +32,12 @@ export default defineNuxtConfig({
 
   // Nuxt UI
   colorMode: {
-    preference: "light",
+    // Disable Dark Mod
+    // preference: "light",
   },
+
+  // Gobal Style
+  css: ["~/assets/css/main.css"],
 
   // PWA
   pwa: {

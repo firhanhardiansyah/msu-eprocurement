@@ -1,9 +1,18 @@
 <script setup lang="ts">
-const props = defineProps<{
-  stockAvailable: number;
-}>();
+const props = defineProps({
+  stockAvailable: {
+    type: Number,
+    required: true,
+  },
+  qty: {
+    type: Number,
+  },
+  reduceTrash: {
+    type: Boolean,
+  },
+});
 
-const qty = ref<number>(1);
+const qty = ref<number>(props.qty || 1);
 
 const disabledAddQty = ref<boolean>(false);
 
@@ -22,7 +31,7 @@ onMounted(() => {
   disabledAddQty.value = qty.value > props.stockAvailable ? true : false;
 });
 
-watch(qty, (newQty, oldQty) => {
+watch(qty, (newQty) => {
   // Jika input qty kosong maka di isi dengan qty 0
   if (typeof newQty !== "number" || qty.value < 0 || qty.value === 0) {
     qty.value = 0;
@@ -47,17 +56,33 @@ watch(qty, (newQty, oldQty) => {
     type="number"
   >
     <template #leading>
-      <UButton
-        color="gray"
-        variant="link"
-        icon="i-heroicons-minus"
-        :padded="false"
-        @click="reduceQty()"
-        :disabled="qty < 2"
-        :class="[
-          qty > 1 && 'hover:bg-primary-100 hover:text-primary text-primary',
-        ]"
-      />
+      <div v-if="props.reduceTrash && qty < 2" class="flex justify-center">
+        <UButton
+          color="gray"
+          variant="link"
+          icon="i-heroicons-trash"
+          :padded="false"
+          @click="reduceQty()"
+          class="text-gray-400"
+          :class="[
+            qty > 1 && 'hover:bg-primary-100 hover:text-primary text-primary',
+          ]"
+          v-if="props.reduceTrash && qty < 2"
+        />
+      </div>
+      <template v-else>
+        <UButton
+          color="gray"
+          variant="link"
+          icon="i-heroicons-minus"
+          :padded="false"
+          @click="reduceQty()"
+          :disabled="qty < 2"
+          :class="[
+            qty > 1 && 'hover:bg-primary-100 hover:text-primary text-primary',
+          ]"
+        />
+      </template>
     </template>
     <template #trailing>
       <UButton
@@ -67,6 +92,7 @@ watch(qty, (newQty, oldQty) => {
         :padded="false"
         @click="addQty()"
         :disabled="disabledAddQty"
+        class="text-gray-400"
         :class="[
           !disabledAddQty &&
             'hover:bg-primary-100 hover:text-primary text-primary',

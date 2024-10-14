@@ -17,5 +17,8 @@ export function currencyFormat(
     style: "currency",
     currency,
     minimumFractionDigits: 0, // Rupiah usually does not use decimal places
-  }).format(amount);
+  })
+    .format(amount)
+    .replace(/^(\D+)/, "$1 ")
+    .replace(/\s+/, "");
 }

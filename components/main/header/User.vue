@@ -5,7 +5,7 @@ const { isAuthenticated, user, signOut } = useAuth();
 <template>
   <!-- Hidden in mobile -->
   <div v-if="!isAuthenticated" class="hidden lg:flex">
-    <div class="border-l-[1px] pl-2">
+    <div class="border-l-[1px] dark:border-slate-600 pl-2">
       <div class="flex gap-2">
         <UButton label="Sign In" color="gray" @click="navigateTo('/sign-in')" />
         <UButton

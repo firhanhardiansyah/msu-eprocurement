@@ -1,40 +1,7 @@
 <script setup lang="ts">
 const isOpen = ref<boolean>(false);
 
-const { t } = useI18n();
-
-const links = [
-  [
-    {
-      label: t("general.home"),
-      to: "/",
-      click: () => {
-        isOpen.value = !isOpen.value;
-      },
-    },
-    {
-      label: t("general.announcement"),
-      to: "/announcements",
-      click: () => {
-        isOpen.value = !isOpen.value;
-      },
-    },
-    {
-      label: t("general.news"),
-      to: "/news",
-      click: () => {
-        isOpen.value = !isOpen.value;
-      },
-    },
-    {
-      label: t("general.contact"),
-      to: "/contact",
-      click: () => {
-        isOpen.value = !isOpen.value;
-      },
-    },
-  ],
-];
+const { links } = useNavbar();
 </script>
 
 <template>
