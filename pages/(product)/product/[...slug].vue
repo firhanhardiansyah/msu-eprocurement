@@ -136,7 +136,7 @@ const subTotal = (): string => {
 };
 
 // Cart
-const { addToCart, cart } = useCart();
+const { addToCart } = useCart();
 </script>
 
 <template>
@@ -232,7 +232,7 @@ const { addToCart, cart } = useCart();
                   label="+ Keranjang"
                   size="lg"
                   block
-                  @click="addToCart(productData?.data!, qtyProduct)"
+                  @click="addToCart(productData!.data!, qtyProduct)"
                 />
               </div>
             </div>

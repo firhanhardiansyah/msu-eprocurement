@@ -46,6 +46,7 @@ interface Product {
   seller_ids?: Seller[];
   url_slug?: string;
   quantity: number = 0;
+  addedAt: Date | string | null; // Null safety dan handling string
 }
 
 interface ProductData {

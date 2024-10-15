@@ -2,12 +2,12 @@ export const useCart = () => {
   const cart = useState<CartItem[]>("cart", () => []);
 
   // Muat data dari session storage atau local storage ketika pertama kali composable dipanggil
-  onMounted(() => {
+  const loadCart = () => {
     const storedCart = sessionStorage.getItem("cart");
     if (storedCart) {
       cart.value = JSON.parse(storedCart);
     }
-  });
+  };
 
   // Function to add a product to the cart
   const addToCart = (product: Product, qty: number) => {
@@ -16,7 +16,11 @@ export const useCart = () => {
     );
 
     // Ensure quantity is a valid number
-    const productWithQuantity = { ...product, quantity: product.quantity || 1 };
+    const productWithQuantity = {
+      ...product,
+      quantity: qty,
+      addedAt: new Date(),
+    };
 
     if (categoryIndex === -1) {
       // If category doesn't exist, create a new category and subCategory
@@ -112,11 +116,15 @@ export const useCart = () => {
         }
       }
     }
+
+    sessionStorage.setItem("cart", JSON.stringify(cart.value));
   };
 
   // Clear the entire cart
   const clearCart = () => {
     cart.value = [];
+
+    sessionStorage.removeItem("cart");
   };
 
   // Function to calculate total items in the cart
@@ -163,11 +171,39 @@ export const useCart = () => {
     return [...cart.value].sort((a, b) => b.createdAt - a.createdAt);
   });
 
+  // Sorting function LIFO dengan null safety dan handling string
+  const sortedCartFinally = computed(() => {
+    return cart.value
+      .map((category) => ({
+        ...category,
+        subCategories: category.subCategories.map((subCategory) => ({
+          ...subCategory,
+          products: [...subCategory.products].sort((a, b) => {
+            // Ensure addedAt is a Date object before sorting
+            const dateA = a.addedAt ? new Date(a.addedAt).getTime() : 0;
+            const dateB = b.addedAt ? new Date(b.addedAt).getTime() : 0;
+            return dateB - dateA;
+          }),
+        })),
+      }))
+      .sort((a, b) => {
+        const dateA = a.subCategories[0]?.products[0]?.addedAt
+          ? new Date(a.subCategories[0]?.products[0]?.addedAt).getTime()
+          : 0;
+        const dateB = b.subCategories[0]?.products[0]?.addedAt
+          ? new Date(b.subCategories[0]?.products[0]?.addedAt).getTime()
+          : 0;
+        return dateB - dateA;
+      });
+  });
+
   return {
     cart,
     totalItems,
     totalPrice,
     sortedCart,
+    sortedCartFinally,
+    loadCart,
     addToCart,
     removeFromCart,
     clearCart,

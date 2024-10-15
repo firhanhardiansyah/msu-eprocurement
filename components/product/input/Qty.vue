@@ -16,16 +16,26 @@ const qty = ref<number>(props.qty || 1);
 
 const disabledAddQty = ref<boolean>(false);
 
-const emit = defineEmits(["update:qty"]);
+const emit = defineEmits([
+  "update:qty",
+  "remote:item",
+  "add:item",
+  "reduce:item",
+]);
 
 const addQty = () => {
   qty.value++;
   emit("update:qty", qty.value);
+
+  emit("add:item", qty.value);
 };
 const reduceQty = () => {
   qty.value--;
   emit("update:qty", qty.value);
+
+  emit("reduce:item", qty.value);
 };
+const removeQty = () => emit("remote:item");
 
 onMounted(() => {
   disabledAddQty.value = qty.value > props.stockAvailable ? true : false;
@@ -56,13 +66,14 @@ watch(qty, (newQty) => {
     type="number"
   >
     <template #leading>
+      <!-- Remove Item -->
       <div v-if="props.reduceTrash && qty < 2" class="flex justify-center">
         <UButton
           color="gray"
           variant="link"
           icon="i-heroicons-trash"
           :padded="false"
-          @click="reduceQty()"
+          @click="removeQty()"
           class="text-gray-400"
           :class="[
             qty > 1 && 'hover:bg-primary-100 hover:text-primary text-primary',
@@ -70,6 +81,8 @@ watch(qty, (newQty) => {
           v-if="props.reduceTrash && qty < 2"
         />
       </div>
+
+      <!-- Reduce Item -->
       <template v-else>
         <UButton
           color="gray"
