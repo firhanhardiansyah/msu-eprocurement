@@ -15,6 +15,14 @@ export default defineNuxtConfig({
     "nuxt-time",
   ],
 
+  // Development Config
+  $development: {
+    devServer: {
+      host: ["localhost"],
+      port: 3000,
+    },
+  },
+
   // App Config
   app: {
     head: {
@@ -50,7 +58,7 @@ export default defineNuxtConfig({
       name: "MSU eCatalog",
       short_name: "eCatalog",
       description: "PT.MSU eCatalog",
-      theme_color: "#fbbf24",
+      theme_color: "#FFCB04",
       icons: [
         {
           src: "msu-192x192.png",
