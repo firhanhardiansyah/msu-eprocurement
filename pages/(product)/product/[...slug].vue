@@ -127,13 +127,29 @@ const tabs = [
   },
 ];
 
-// QTY
-const qtyProduct = ref<number>(1);
+const productAvailable = computed(() => {
+  const item = productData?.value?.data;
+  return (item?.qty_available ?? 0) > 0 ? true : false;
+});
 
-const subTotal = (): string => {
+const productStock = computed(() => {
+  const item = productData?.value?.data;
+  return item?.type === "product" ? true : false;
+});
+const productNonStock = computed(() => {
+  const item = productData?.value?.data;
+  return item?.type === "consu" || item?.type === "service" ? true : false;
+});
+
+// QTY
+const qtyProduct = ref<number>(
+  productAvailable.value || productNonStock ? 1 : 0
+);
+
+const subTotal = computed(() => {
   const amount = productData?.value?.data?.standard_price ?? 0;
   return currencyFormat(qtyProduct.value * amount);
-};
+});
 
 // Cart
 const { addToCart } = useCart();
@@ -189,7 +205,7 @@ const { addToCart } = useCart();
             <div class="flex flex-col gap-2 mb-2 lg:mb-0 lg:w-2/3">
               <div>
                 <div class="text-xl">{{ productData?.data?.name }}</div>
-                <div class="text-base text-slate-500">
+                <div class="text-base text-slate-500 dark:text-zinc-400">
                   {{ productData?.data?.default_code }}
                 </div>
               </div>
@@ -213,27 +229,49 @@ const { addToCart } = useCart();
             <div
               class="border-y-[1px] md:border-b-0 border-gray-200 dark:border-zinc-800 py-4 lg:w-1/3 lg:border-[1px] lg:p-4 lg:rounded-lg"
             >
-              <div class="flex flex-col gap-3">
-                <div class="flex flex-row items-center gap-4">
-                  <ProductInputQty
-                    v-model:qty="qtyProduct"
-                    :stock-available="productData?.data?.qty_available ?? 0"
-                  />
-                  <div class="text-sm">
-                    <span class="text-slate-600">Stok : </span>
-                    <span>{{ productData?.data?.qty_available }}</span>
+              <div class="flex flex-col gap-2">
+                <template v-if="productAvailable && productStock">
+                  <div
+                    class="flex items-center gap-4 lg:flex-row xl:items-end lg:mb-0 lg:justify-between lg:gap-3"
+                  >
+                    <ProductInputQty
+                      v-model:qty="qtyProduct"
+                      :stock-available="productData?.data?.qty_available ?? 0"
+                      class="lg:w-24"
+                    />
+                    <div class="text-sm">
+                      <span class="text-slate-600 dark:text-zinc-400">
+                        Stok :
+                      </span>
+                      <span>{{ productData?.data?.qty_available }}</span>
+                    </div>
                   </div>
-                </div>
-                <div class="flex flex-row justify-between text-base items-end">
-                  <span class="">Sub Total</span>
-                  <span class="font-bold text-xl">{{ subTotal() }}</span>
-                </div>
-                <UButton
-                  label="+ Keranjang"
-                  size="lg"
-                  block
-                  @click="addToCart(productData?.data, qtyProduct)"
-                />
+                </template>
+
+                <template v-if="productAvailable || productNonStock">
+                  <div
+                    class="flex flex-row justify-between items-end lg:flex-col lg:items-start xl:flex-row xl:items-end"
+                  >
+                    <span class="text-sm">Sub Total</span>
+                    <span class="font-bold text-xl">{{ subTotal }}</span>
+                  </div>
+                  <UButton
+                    label="+ Keranjang"
+                    size="lg"
+                    block
+                    @click="addToCart(productData?.data, qtyProduct)"
+                  />
+                </template>
+
+                <!-- Product Not Available -->
+                <template v-if="!productAvailable && !productNonStock">
+                  <div class="text-sm">
+                    <span class="text-slate-600 dark:text-zinc-400">
+                      Stok tidak tersedia
+                    </span>
+                  </div>
+                  <UButton label="+ Keranjang" block disabled />
+                </template>
               </div>
             </div>
           </div>

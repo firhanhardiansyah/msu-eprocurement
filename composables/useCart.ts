@@ -90,35 +90,33 @@ export const useCart = () => {
       (cat) => cat.category === category
     );
 
-    if (categoryIndex !== -1) {
-      const subCategoryIndex = cart.value[
-        categoryIndex
-      ].subCategories.findIndex((sub) => sub.subCategory === subCategory);
+    const subCategoryIndex = cart.value[categoryIndex].subCategories.findIndex(
+      (sub) => sub.subCategory === subCategory
+    );
 
-      if (subCategoryIndex !== -1) {
-        const productIndex = cart.value[categoryIndex].subCategories[
-          subCategoryIndex
-        ].products.findIndex((p) => p.id === productId);
+    const productIndex = cart.value[categoryIndex].subCategories[
+      subCategoryIndex
+    ].products.findIndex((p) => p.id === productId);
 
-        if (productIndex !== -1) {
-          // Remove the product
-          cart.value[categoryIndex].subCategories[
-            subCategoryIndex
-          ].products.splice(productIndex, 1);
+    if (categoryIndex === -1 || subCategoryIndex === -1 || productIndex === -1)
+      return;
 
-          // Clean up empty subCategories or categories
-          if (
-            cart.value[categoryIndex].subCategories[subCategoryIndex].products
-              .length === 0
-          ) {
-            cart.value[categoryIndex].subCategories.splice(subCategoryIndex, 1);
-          }
+    // Remove the product
+    cart.value[categoryIndex].subCategories[subCategoryIndex].products.splice(
+      productIndex,
+      1
+    );
 
-          if (cart.value[categoryIndex].subCategories.length === 0) {
-            cart.value.splice(categoryIndex, 1);
-          }
-        }
-      }
+    // Clean up empty subCategories or categories
+    if (
+      cart.value[categoryIndex].subCategories[subCategoryIndex].products
+        .length === 0
+    ) {
+      cart.value[categoryIndex].subCategories.splice(subCategoryIndex, 1);
+    }
+
+    if (cart.value[categoryIndex].subCategories.length === 0) {
+      cart.value.splice(categoryIndex, 1);
     }
 
     sessionStorage.setItem("cart", JSON.stringify(cart.value));
@@ -160,6 +158,24 @@ export const useCart = () => {
     });
   };
 
+  // Method to update products and check whether all products in a subcategory are checked.
+  const toggleProduct = (
+    category: CartItem,
+    subCategory: CartSubItem,
+    product: Product,
+    isChecked: boolean
+  ) => {
+    product.checked = isChecked || false;
+
+    // Check if all products in the subcategory are checked
+    const allProductsChecked = subCategory.products.every(
+      (product) => product.checked
+    );
+
+    // If all products are checked, the subcategory is also checked, otherwise uncheck the subcategory.
+    category.checked = allProductsChecked;
+  };
+
   // Function to calculate total price in the cart
   const totalPrice = computed(() => {
     let total = 0;
@@ -167,7 +183,7 @@ export const useCart = () => {
       category.subCategories.forEach((subCategory) => {
         subCategory.products.forEach((product) => {
           if (product.checked) {
-            total += product.standard_price ?? 0;
+            total += (product.standard_price ?? 0) * product.quantity;
           }
         });
       });
@@ -206,10 +222,13 @@ export const useCart = () => {
     totalItems,
     totalPrice,
     sortedCart,
+
     loadCart,
     addToCart,
     removeFromCart,
     clearCart,
+
     toggleCategory,
+    toggleProduct,
   };
 };
