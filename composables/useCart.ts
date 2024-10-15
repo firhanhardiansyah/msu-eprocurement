@@ -1,7 +1,7 @@
 export const useCart = () => {
   const cart = useState<CartItem[]>("cart", () => []);
 
-  // Muat data dari session storage atau local storage ketika pertama kali composable dipanggil
+  // Load data from session storage or local storage when the composable is first called.
   const loadCart = () => {
     const storedCart = sessionStorage.getItem("cart");
     if (storedCart) {
@@ -20,6 +20,7 @@ export const useCart = () => {
       ...product,
       quantity: qty,
       addedAt: new Date(),
+      checked: false,
     };
 
     if (categoryIndex === -1) {
@@ -30,9 +31,11 @@ export const useCart = () => {
           {
             subCategory: product.categ_id?.name ?? "",
             products: [productWithQuantity],
+            checked: false,
           },
         ],
         createdAt: Date.now(),
+        checked: false,
       });
     } else {
       const subCategoryIndex = cart.value[
@@ -46,6 +49,7 @@ export const useCart = () => {
         cart.value[categoryIndex].subCategories.push({
           subCategory: product.categ_id?.name ?? "",
           products: [productWithQuantity],
+          checked: false,
         });
       } else {
         // If subCategory exists, add product to the subCategory
@@ -145,25 +149,30 @@ export const useCart = () => {
     }, 0);
   });
 
+  // Method to update all products and subcategories when a category is checked
+  const toggleCategory = (category: CartItem, isChecked: boolean) => {
+    category.checked = isChecked || false;
+
+    category.subCategories.forEach((subCategory) => {
+      subCategory.products.forEach((product) => {
+        product.checked = isChecked || false;
+      });
+    });
+  };
+
   // Function to calculate total price in the cart
   const totalPrice = computed(() => {
-    return cart.value.reduce((total, categoryItem) => {
-      return (
-        total +
-        categoryItem.subCategories.reduce((subTotal, subCategoryItem) => {
-          return (
-            subTotal +
-            subCategoryItem.products.reduce((productTotal, product) => {
-              // Calculate total price per product based on quantity and price
-              return (
-                productTotal +
-                (product.quantity || 0) * (product.standard_price ?? 0)
-              );
-            }, 0)
-          );
-        }, 0)
-      );
-    }, 0);
+    let total = 0;
+    cart.value.forEach((category) => {
+      category.subCategories.forEach((subCategory) => {
+        subCategory.products.forEach((product) => {
+          if (product.checked) {
+            total += product.standard_price ?? 0;
+          }
+        });
+      });
+    });
+    return total;
   });
 
   // Sorting function LIFO dengan null safety dan handling string
@@ -201,5 +210,6 @@ export const useCart = () => {
     addToCart,
     removeFromCart,
     clearCart,
+    toggleCategory,
   };
 };

@@ -1,8 +1,14 @@
 <script setup lang="ts">
 const isOpen = ref(false);
 
-const { totalItems, sortedCart, totalPrice, removeFromCart, addToCart } =
-  useCart();
+const {
+  totalItems,
+  sortedCart,
+  totalPrice,
+  removeFromCart,
+  addToCart,
+  toggleCategory,
+} = useCart();
 </script>
 
 <template>
@@ -40,17 +46,19 @@ const { totalItems, sortedCart, totalPrice, removeFromCart, addToCart } =
           >
             <div v-if="sortedCart.length > 0">
               <div
-                v-for="categoryItem in sortedCart"
+                v-for="(categoryItem, categoryIndex) in sortedCart"
                 :key="categoryItem.category"
                 class="bg-white dark:bg-neutral-900 mb-3"
               >
-                <UCheckbox class="px-4 py-3">
-                  <template #label>
-                    <span class="font-semibold cursor-pointer">
-                      {{ categoryItem.category }}
-                    </span>
-                  </template>
-                </UCheckbox>
+                <UCheckbox
+                  class="px-4 py-3"
+                  :ui="{
+                    label: 'font-semibold cursor-pointer',
+                  }"
+                  :label="categoryItem.category"
+                  v-model="categoryItem.checked"
+                  @update:model-value="toggleCategory(categoryItem, $event)"
+                />
                 <div
                   v-for="subcategoryItem in categoryItem.subCategories"
                   :key="subcategoryItem.subCategory"
@@ -63,7 +71,7 @@ const { totalItems, sortedCart, totalPrice, removeFromCart, addToCart } =
                     <div class="py-2 flex justify-between gap-2">
                       <div class="flex gap-3">
                         <!-- Select Product -->
-                        <UCheckbox />
+                        <UCheckbox v-model="product.checked" />
 
                         <!-- Image -->
                         <div class="bg-gray-500 h-12 w-12 rounded-md" />
