@@ -41,7 +41,9 @@ const categoriesLinks = computed(() => {
         }"
         class="py-2"
       >
-        <div class="px-3 py-2 text-base font-semibold text-gray-800">
+        <div
+          class="px-3 py-2 text-base font-semibold text-gray-800 dark:text-primary"
+        >
           <h1>{{ $t("general.category") }}</h1>
         </div>
 
@@ -50,7 +52,7 @@ const categoriesLinks = computed(() => {
             <UButton
               color="gray"
               variant="ghost"
-              class="border-b border-gray-100 dark:border-gray-700 hover:text-primary"
+              class="border-b border-gray-100 dark:border-zinc-700 hover:text-primary"
               :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }"
             >
               <span class="truncate">{{ toCapitalCase(item.label) }}</span>
@@ -78,7 +80,7 @@ const categoriesLinks = computed(() => {
                 class="text-gray-900 dark:text-white pl-6 py-2 hover:bg-gray-100 hover:text-primary"
                 :class="[
                   childItem.url_slug == lastSlug &&
-                    'bg-primary-100 text-primary',
+                    'bg-primary-100 text-primary dark:bg-primary dark:text-primary-700',
                 ]"
               >
                 {{ childItem.name }}

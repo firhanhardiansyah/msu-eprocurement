@@ -59,7 +59,7 @@ const categoriesLinks = computed(() => {
             <UButton
               color="gray"
               variant="ghost"
-              class="border-b border-gray-100 dark:border-gray-700 hover:text-primary"
+              class="border-b border-gray-100 hover:text-primary dark:text-primary dark:border-gray-700"
               :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }"
             >
               <span class="truncate">{{ item.label }}</span>
@@ -81,7 +81,7 @@ const categoriesLinks = computed(() => {
               :to="toProductCategory(item.slug, childItem.url_slug)"
             >
               <div
-                class="text-gray-900 dark:text-white pl-6 py-2 hover:bg-gray-100 hover:text-primary"
+                class="text-gray-900 pl-6 py-2 hover:bg-gray-100 hover:text-primary dark:text-primary-500 dark:hover:bg-zinc-800"
               >
                 {{ childItem.name }}
               </div>
@@ -97,7 +97,7 @@ const categoriesLinks = computed(() => {
       >
         <NuxtLink :to="'/category/' +item.url_slug!">
           <h5
-            class="font-semibold text-slate-800 text-lg py-2 hover:text-primary"
+            class="font-semibold text-slate-800 text-lg py-2 hover:text-primary dark:text-primary"
           >
             {{ item.name }}
           </h5>
@@ -105,7 +105,9 @@ const categoriesLinks = computed(() => {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mb-2">
           <div v-for="child in item.items">
             <NuxtLink :to="toProductCategory(item.url_slug!, child.url_slug!)">
-              <p class="cursor-pointer text-slate-600 hover:text-primary">
+              <p
+                class="cursor-pointer text-slate-600 hover:text-primary dark:text-primary-100"
+              >
                 {{ child?.name }}
               </p>
             </NuxtLink>

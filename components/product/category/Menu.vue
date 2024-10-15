@@ -45,8 +45,10 @@ const toProductDetail = (productSlug?: string) => {
         class="flex flex-col gap-2 md:flex-row md:justify-between md:items-center"
       >
         <div class="flex flex-row">
-          <div class="text-sm md:text-base text-slate-600 flex gap-1">
-            <span class="text-slate-900 font-semibold">
+          <div
+            class="text-sm md:text-base text-slate-600 flex gap-1 dark:text-primary"
+          >
+            <span class="text-slate-900 font-semibold dark:text-primary">
               {{ productsData?.data?.total_data }}
             </span>
             <span>{{ $t("general.product_found") }}</span>

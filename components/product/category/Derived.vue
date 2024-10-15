@@ -34,7 +34,9 @@ const { toProductCategory } = useProduct();
             )
           "
         >
-          <p class="cursor-pointer text-slate-600 hover:text-primary">
+          <p
+            class="cursor-pointer text-slate-600 hover:text-primary dark:text-primary-100"
+          >
             {{ item?.name }}
           </p>
         </NuxtLink>
