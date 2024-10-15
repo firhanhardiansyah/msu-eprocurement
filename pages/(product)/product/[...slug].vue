@@ -141,7 +141,7 @@ const { addToCart } = useCart();
 
 <template>
   <NuxtLayout name="product" :links="links">
-    <template v-if="productStatus == 'success'">
+    <template v-if="productStatus == 'success' && productData?.data != null">
       <div class="flex flex-col gap-2 md:flex-row md:gap-5">
         <!-- Carousel -->
         <div class="w-full md:w-1/2 lg:w-1/3">
@@ -232,7 +232,7 @@ const { addToCart } = useCart();
                   label="+ Keranjang"
                   size="lg"
                   block
-                  @click="addToCart(productData!.data!, qtyProduct)"
+                  @click="addToCart(productData?.data, qtyProduct)"
                 />
               </div>
             </div>
