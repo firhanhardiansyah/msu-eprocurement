@@ -1,10 +1,12 @@
 interface CartItem {
   category: string;
-  subCategories: {
-    subCategory: string;
-    products: Product[];
-    checked: boolean;
-  }[];
+  subCategories: CartSubItem[];
   createdAt: number;
+  checked: boolean;
+}
+
+interface CartSubItem {
+  subCategory: string;
+  products: Product[];
   checked: boolean;
 }
