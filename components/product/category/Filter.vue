@@ -55,14 +55,14 @@ const categoriesLinks = computed(() => {
               class="border-b border-gray-100 dark:border-zinc-800 hover:text-primary"
               :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }"
             >
-              <span class="truncate dark:text-green-500">{{
-                toCapitalCase(item.label)
-              }}</span>
+              <span class="truncate dark:text-primary">
+                {{ toCapitalCase(item.label) }}
+              </span>
 
               <template #trailing v-if="item.items.length > 0">
                 <UIcon
                   name="i-heroicons-chevron-right-20-solid"
-                  class="w-5 h-5 ms-auto transform transition-transform duration-200 dark:text-green-500"
+                  class="w-5 h-5 ms-auto transform transition-transform duration-200 dark:text-primary"
                   :class="[open && 'rotate-90']"
                 />
               </template>
@@ -82,7 +82,7 @@ const categoriesLinks = computed(() => {
                 class="text-gray-900 dark:text-primary pl-6 py-2 hover:bg-gray-100 hover:text-primary dark:hover:bg-zinc-800"
                 :class="[
                   childItem.url_slug == lastSlug &&
-                    'bg-primary-100 text-primary dark:bg-primary dark:text-zinc-950 dark:hover:bg-primary',
+                    'bg-primary-100 text-primary dark:bg-primary dark:text-zinc-950 dark:hover:text-primary',
                 ]"
               >
                 {{ childItem.name }}

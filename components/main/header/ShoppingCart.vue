@@ -8,6 +8,7 @@ const {
   removeFromCart,
   addToCart,
   toggleCategory,
+  toggleProduct,
 } = useCart();
 </script>
 
@@ -60,18 +61,30 @@ const {
                   @update:model-value="toggleCategory(categoryItem, $event)"
                 />
                 <div
-                  v-for="subcategoryItem in categoryItem.subCategories"
-                  :key="subcategoryItem.subCategory"
+                  v-for="(
+                    subCategoryItem, subCategoryIndex
+                  ) in categoryItem.subCategories"
+                  :key="subCategoryItem.subCategory"
                 >
                   <div
-                    v-for="product in subcategoryItem.products"
+                    v-for="(product, productIndex) in subCategoryItem.products"
                     :key="product.id"
                     class="px-4"
                   >
                     <div class="py-2 flex justify-between gap-2">
                       <div class="flex gap-3">
                         <!-- Select Product -->
-                        <UCheckbox v-model="product.checked" />
+                        <UCheckbox
+                          v-model="product.checked"
+                          @update:model-value="
+                            toggleProduct(
+                              categoryItem,
+                              subCategoryItem,
+                              product,
+                              $event
+                            )
+                          "
+                        />
 
                         <!-- Image -->
                         <div class="bg-gray-500 h-12 w-12 rounded-md" />
@@ -115,7 +128,7 @@ const {
                           @remote:item="
                             removeFromCart(
                               product.id!,
-                              subcategoryItem.subCategory,
+                              subCategoryItem.subCategory,
                               categoryItem.category
                             )
                           "

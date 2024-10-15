@@ -10,6 +10,9 @@ export default defineAppConfig({
       ring: "",
       divide: "divide-y divide-gray-100 dark:divide-gray-800",
     },
+    checkbox: {
+      base: "dark:checked:bg-primary-700",
+    },
   },
 
   site: {

@@ -32,7 +32,7 @@
                 class="flex items-center justify-center gap-1 text-slate-600 text-sm dark:text-white"
               >
                 Get deliveries with
-                <span class="text-green-600 font-semibold"> eCatalog </span>
+                <span class="text-primary font-semibold"> eCatalog </span>
               </div>
               <div class="flex">
                 <img
@@ -57,11 +57,11 @@
           <p class="text-sm text-slate-500 dark:text-white">
             <span>© </span>
             <NuxtTime :datetime="Date.now()" year="numeric" />
-            <span class="text-green-600 font-semibold dark:text-green-400">
+            <span class="text-primary-600 font-semibold dark:text-primary-400">
               eCatalog</span
             >
             <span> Powered by</span>
-            <span class="text-primary-600 font-semibold dark:text-green-400">
+            <span class="text-primary-600 font-semibold dark:text-primary-400">
               PT. Magma Sigma Utama
             </span>
           </p>
