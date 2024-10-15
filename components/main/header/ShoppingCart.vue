@@ -1,13 +1,8 @@
 <script setup lang="ts">
 const isOpen = ref(false);
 
-const { totalItems, sortedCartFinally, totalPrice, removeFromCart, addToCart } =
+const { totalItems, sortedCart, totalPrice, removeFromCart, addToCart } =
   useCart();
-
-const addToCartTest = (value: any) => {
-  console.log("addToCartTest");
-  console.log(value);
-};
 </script>
 
 <template>
@@ -28,9 +23,7 @@ const addToCartTest = (value: any) => {
             <div class="flex items-center justify-between">
               <h3 class="text-base font-semibold dark:text-primary">
                 Shopping Cart
-                <span v-if="sortedCartFinally.length > 0"
-                  >({{ totalItems }})</span
-                >
+                <span v-if="sortedCart.length > 0">({{ totalItems }})</span>
               </h3>
               <UButton
                 color="gray"
@@ -43,11 +36,11 @@ const addToCartTest = (value: any) => {
 
           <main
             class="flex-grow overflow-y-auto bg-gray-100 dark:bg-zinc-900"
-            :class="[sortedCartFinally.length == 0 && 'bg-white']"
+            :class="[sortedCart.length == 0 && 'bg-white']"
           >
-            <div v-if="sortedCartFinally.length > 0">
+            <div v-if="sortedCart.length > 0">
               <div
-                v-for="categoryItem in sortedCartFinally"
+                v-for="categoryItem in sortedCart"
                 :key="categoryItem.category"
                 class="bg-white dark:bg-neutral-900 mb-3"
               >
@@ -157,7 +150,7 @@ const addToCartTest = (value: any) => {
 
           <div
             class="p-4 border-t-[1px] dark:border-zinc-800"
-            v-if="sortedCartFinally.length > 0"
+            v-if="sortedCart.length > 0"
           >
             <div class="mb-4 flex justify-between items-end">
               <p class="text-base">Total</p>

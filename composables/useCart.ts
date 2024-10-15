@@ -166,13 +166,8 @@ export const useCart = () => {
     }, 0);
   });
 
-  // Return sorted cart items based on LIFO (newest categories first)
-  const sortedCart = computed(() => {
-    return [...cart.value].sort((a, b) => b.createdAt - a.createdAt);
-  });
-
   // Sorting function LIFO dengan null safety dan handling string
-  const sortedCartFinally = computed(() => {
+  const sortedCart = computed(() => {
     return cart.value
       .map((category) => ({
         ...category,
@@ -202,7 +197,6 @@ export const useCart = () => {
     totalItems,
     totalPrice,
     sortedCart,
-    sortedCartFinally,
     loadCart,
     addToCart,
     removeFromCart,
