@@ -211,7 +211,7 @@ const { addToCart } = useCart();
 
             <!-- QTY -->
             <div
-              class="border-y-[1px] md:border-b-0 border-gray-200 py-4 lg:w-1/3 lg:border-[1px] lg:p-4 lg:rounded-lg"
+              class="border-y-[1px] md:border-b-0 border-gray-200 dark:border-zinc-800 py-4 lg:w-1/3 lg:border-[1px] lg:p-4 lg:rounded-lg"
             >
               <div class="flex flex-col gap-3">
                 <div class="flex flex-row items-center gap-4">

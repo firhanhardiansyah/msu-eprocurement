@@ -26,7 +26,7 @@ const addToCartTest = (value: any) => {
           <!-- Header -->
           <div class="p-4 border-b-[1px] dark:border-zinc-800">
             <div class="flex items-center justify-between">
-              <h3 class="text-base font-semibold">
+              <h3 class="text-base font-semibold dark:text-primary">
                 Shopping Cart
                 <span v-if="sortedCartFinally.length > 0"
                   >({{ totalItems }})</span
@@ -34,10 +34,8 @@ const addToCartTest = (value: any) => {
               </h3>
               <UButton
                 color="gray"
-                variant="ghost"
                 icon="i-heroicons-x-mark-20-solid"
-                class="-my-1"
-                :padded="false"
+                class="dark:text-primary"
                 @click="isOpen = false"
               />
             </div>
@@ -45,13 +43,13 @@ const addToCartTest = (value: any) => {
 
           <main
             class="flex-grow overflow-y-auto bg-gray-100 dark:bg-zinc-900"
-            :class="[sortedCartFinally.length == 0 && 'bg-white ']"
+            :class="[sortedCartFinally.length == 0 && 'bg-white']"
           >
             <div v-if="sortedCartFinally.length > 0">
               <div
                 v-for="categoryItem in sortedCartFinally"
                 :key="categoryItem.category"
-                class="bg-white mb-3"
+                class="bg-white dark:bg-neutral-900 mb-3"
               >
                 <UCheckbox class="px-4 py-3">
                   <template #label>
@@ -87,7 +85,7 @@ const addToCartTest = (value: any) => {
                             {{ product.qty_available }}
                           </p>
                           <p
-                            class="text-sm text-gray-500 text-ellipsis overflow-hidden max-w-52"
+                            class="text-sm text-gray-500 text-ellipsis overflow-hidden max-w-52 dark:text-zinc-200"
                           >
                             {{ product.name }}
                           </p>
@@ -127,12 +125,13 @@ const addToCartTest = (value: any) => {
                 </div>
               </div>
             </div>
+
             <template v-else>
-              <div class="mx-4 mt-10">
+              <div class="mx-4 mt-4 md:mt-10">
                 <article class="prose prose-slate dark:prose-invert">
                   <NuxtImg
                     src="/images/illustration/empty_cart.svg"
-                    class="w-72 dark:bg-primary-400 dark:p-4 dark:rounded-3xl"
+                    class="w-64 md:w-72 dark:bg-primary-400 dark:p-4 dark:rounded-3xl"
                   />
                   <h1>Keranjang belanjamu masih kosong.</h1>
                   <p>

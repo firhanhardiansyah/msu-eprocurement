@@ -70,13 +70,18 @@ watch(qty, (newQty) => {
       <div v-if="props.reduceTrash && qty < 2" class="flex justify-center">
         <UButton
           color="gray"
+          :ui="{
+            icon: {
+              base: 'text-gray-400',
+            },
+          }"
           variant="link"
           icon="i-heroicons-trash"
           :padded="false"
           @click="removeQty()"
-          class="text-gray-400"
           :class="[
-            qty > 1 && 'hover:bg-primary-100 hover:text-primary text-primary',
+            qty > 1 &&
+              'hover:bg-primary-100 hover:text-primary text-primary dark:hover:bg-zinc-700',
           ]"
           v-if="props.reduceTrash && qty < 2"
         />
@@ -92,7 +97,8 @@ watch(qty, (newQty) => {
           @click="reduceQty()"
           :disabled="qty < 2"
           :class="[
-            qty > 1 && 'hover:bg-primary-100 hover:text-primary text-primary',
+            qty > 1 &&
+              'hover:bg-primary-100 hover:text-primary text-primary dark:hover:bg-zinc-700',
           ]"
         />
       </template>
@@ -105,7 +111,7 @@ watch(qty, (newQty) => {
         :padded="false"
         @click="addQty()"
         :disabled="disabledAddQty"
-        class="text-gray-400"
+        class="text-gray-400 dark:hover:bg-zinc-700"
         :class="[
           !disabledAddQty &&
             'hover:bg-primary-100 hover:text-primary text-primary',

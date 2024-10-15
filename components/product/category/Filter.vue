@@ -52,15 +52,17 @@ const categoriesLinks = computed(() => {
             <UButton
               color="gray"
               variant="ghost"
-              class="border-b border-gray-100 dark:border-zinc-700 hover:text-primary"
+              class="border-b border-gray-100 dark:border-zinc-800 hover:text-primary"
               :ui="{ rounded: 'rounded-none', padding: { sm: 'p-3' } }"
             >
-              <span class="truncate">{{ toCapitalCase(item.label) }}</span>
+              <span class="truncate dark:text-green-500">{{
+                toCapitalCase(item.label)
+              }}</span>
 
               <template #trailing v-if="item.items.length > 0">
                 <UIcon
                   name="i-heroicons-chevron-right-20-solid"
-                  class="w-5 h-5 ms-auto transform transition-transform duration-200"
+                  class="w-5 h-5 ms-auto transform transition-transform duration-200 dark:text-green-500"
                   :class="[open && 'rotate-90']"
                 />
               </template>
@@ -77,10 +79,10 @@ const categoriesLinks = computed(() => {
               class="cursor-pointer"
             >
               <p
-                class="text-gray-900 dark:text-white pl-6 py-2 hover:bg-gray-100 hover:text-primary"
+                class="text-gray-900 dark:text-primary pl-6 py-2 hover:bg-gray-100 hover:text-primary dark:hover:bg-zinc-800"
                 :class="[
                   childItem.url_slug == lastSlug &&
-                    'bg-primary-100 text-primary dark:bg-primary dark:text-primary-700',
+                    'bg-primary-100 text-primary dark:bg-primary dark:text-zinc-950 dark:hover:bg-primary',
                 ]"
               >
                 {{ childItem.name }}
@@ -90,7 +92,9 @@ const categoriesLinks = computed(() => {
         </UAccordion>
 
         <div class="px-3">
-          <div class="py-2 text-base font-semibold text-gray-800">
+          <div
+            class="py-2 text-base font-semibold text-gray-800 dark:text-primary"
+          >
             <h1>Cari di kategori ini</h1>
           </div>
           <UInput
