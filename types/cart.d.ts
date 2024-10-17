@@ -8,5 +8,5 @@ interface CartItem {
 interface CartSubItem {
   subCategory: string;
   products: Product[];
-  checked: boolean;
+  checked?: boolean;
 }

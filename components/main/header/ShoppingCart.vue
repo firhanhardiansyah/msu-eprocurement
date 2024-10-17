@@ -9,7 +9,17 @@ const {
   addToCart,
   toggleCategory,
   toggleProduct,
+  checkOutProduct,
 } = useCart();
+
+const checkOut = () => {
+  const result = checkOutProduct();
+
+  if (result) {
+    isOpen.value = false;
+    navigateTo("/cart/shipment");
+  }
+};
 </script>
 
 <template>
@@ -93,7 +103,10 @@ const {
                         <div class="flex-1">
                           <p
                             class="font-bold text-xs text-primary-500"
-                            v-if="(product.qty_available ?? 0) < 4"
+                            v-if="
+                              (product.qty_available ?? 0) < 4 &&
+                              product.type === ProductType.storableProduct
+                            "
                           >
                             <span> Sisa </span>
                             {{ product.qty_available }}
@@ -179,7 +192,7 @@ const {
                 {{ currencyFormat(totalPrice) }}
               </p>
             </div>
-            <UButton label="Checkout" size="lg" block />
+            <UButton label="Checkout" size="lg" block @click="checkOut()" />
           </div>
         </div>
       </template>

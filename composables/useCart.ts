@@ -1,11 +1,23 @@
 export const useCart = () => {
+  const toast = useToast();
+
   const cart = useState<CartItem[]>("cart", () => []);
+  const cartShipment = useState<CartSubItem | null>(
+    "cart-shipment",
+    () => null
+  );
 
   // Load data from session storage or local storage when the composable is first called.
   const loadCart = () => {
     const storedCart = sessionStorage.getItem("cart");
+    const storedCartShipment = sessionStorage.getItem("cart-shipment");
+
     if (storedCart) {
       cart.value = JSON.parse(storedCart);
+    }
+
+    if (storedCartShipment) {
+      cartShipment.value = JSON.parse(storedCartShipment);
     }
   };
 
@@ -217,8 +229,69 @@ export const useCart = () => {
       });
   });
 
+  const checkOutProduct = (): boolean => {
+    toast.clear();
+
+    let isCheckOut = false;
+
+    let selectedSubcategory: CartSubItem | null = null;
+    let subCategoryName: String | null = null;
+
+    const checkedProducts: Product[] = [];
+
+    cart.value.forEach((category) => {
+      category.subCategories.forEach((subCategory) => {
+        const subCategoryCheckedProducts = subCategory.products.filter(
+          (product) => product.checked
+        );
+
+        if (subCategoryCheckedProducts.length === 0) return [];
+
+        // Jika ini adalah subkategori pertama dengan produk yang dicentang, simpan subkategori tersebut
+        if (!selectedSubcategory) {
+          selectedSubcategory = subCategory;
+          subCategoryName = subCategory.subCategory;
+        }
+
+        // Jika sudah ada subkategori yang berbeda dengan produk yang dicentang, batalkan checkout
+        if (selectedSubcategory !== subCategory) {
+          toast.add({
+            title: "Pilih produk yang sama dalam satu kategori",
+          });
+
+          // Tidak bisa melakukan checkout produk
+          isCheckOut = false;
+          return [];
+        }
+
+        // Bisa melakukan checkout produk
+        isCheckOut = true;
+
+        // Tambahkan produk yang dicentang ke array checkedProducts
+        checkedProducts.push(...subCategoryCheckedProducts);
+      });
+    });
+
+    if (checkedProducts.length === 0) {
+      toast.add({ title: "Pilih produk terlebih dahulu sebelum di checkout" });
+      return false;
+    }
+
+    if (!isCheckOut) return false;
+
+    cartShipment.value = {
+      subCategory: subCategoryName || "",
+      products: checkedProducts,
+    };
+
+    sessionStorage.setItem("cart-shipment", JSON.stringify(cartShipment.value));
+
+    return true;
+  };
+
   return {
     cart,
+    cartShipment,
     totalItems,
     totalPrice,
     sortedCart,
@@ -230,5 +303,6 @@ export const useCart = () => {
 
     toggleCategory,
     toggleProduct,
+    checkOutProduct,
   };
 };
