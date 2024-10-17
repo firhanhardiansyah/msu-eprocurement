@@ -25,9 +25,9 @@ export const useProduct = () => {
     `/category/${parentSlug}/${childSlug}`;
 
   const changedNameProductType = (type?: string): string => {
-    if (type === "consu") return "Non Stock";
-    if (type === "service") return "Service";
-    if (type === "product") return "Storable Product";
+    if (type === ProductType.nonStock) return "Non Stock";
+    if (type === ProductType.service) return "Service";
+    if (type === ProductType.storableProduct) return "Storable Product";
 
     return "-";
   };
@@ -39,3 +39,9 @@ export const useProduct = () => {
     changedNameProductType,
   };
 };
+
+export enum ProductType {
+  nonStock = "consu",
+  service = "service",
+  storableProduct = "product",
+}
