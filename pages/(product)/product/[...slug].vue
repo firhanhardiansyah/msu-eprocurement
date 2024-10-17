@@ -44,7 +44,6 @@ const breadcrumbItemOverides = computed(() => {
 
   slug.map((url_slug, index) => {
     let goToPage = "";
-
     switch (index) {
       case 0:
         goToPage = `/category/${firstSlug}`;
@@ -56,7 +55,6 @@ const breadcrumbItemOverides = computed(() => {
         goToPage = `/category/${firstSlug}/${slug[2]}`;
         break;
     }
-
     items.push({
       label: toCapitalCase(slugOverride(url_slug)),
       to: goToPage,
@@ -227,7 +225,7 @@ const { addToCart } = useCart();
 
             <!-- QTY -->
             <div
-              class="border-y-[1px] md:border-b-0 border-gray-200 dark:border-zinc-800 py-4 lg:w-1/3 lg:border-[1px] lg:p-4 lg:rounded-lg"
+              class="border-y-[1px] md:border-b-0 border-zinc-100 dark:border-zinc-800 py-4 lg:w-1/3 lg:border-[1px] lg:p-4 lg:rounded-lg lg:flex lg:flex-col lg:justify-center lg:shadow-sm"
             >
               <div class="flex flex-col gap-2">
                 <template v-if="productAvailable && productStock">
@@ -265,12 +263,12 @@ const { addToCart } = useCart();
 
                 <!-- Product Not Available -->
                 <template v-if="!productAvailable && !productNonStock">
-                  <div class="text-sm">
+                  <div class="text-base">
                     <span class="text-slate-600 dark:text-zinc-400">
                       Stok tidak tersedia
                     </span>
                   </div>
-                  <UButton label="+ Keranjang" block disabled />
+                  <UButton label="+ Keranjang" size="lg" block disabled />
                 </template>
               </div>
             </div>

@@ -13,6 +13,10 @@ export default defineAppConfig({
     checkbox: {
       base: "dark:checked:bg-primary-700",
     },
+    notifications: {
+      // Show toasts at the top right of the screen
+      position: "top-0 bottom-[unset]",
+    },
   },
 
   site: {

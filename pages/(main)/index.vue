@@ -1,5 +1,7 @@
 <template>
-  <LandingBanner />
-  <LandingListMenu />
-  <LandingContent />
+  <div class="py-5">
+    <LandingBanner />
+    <LandingListMenu />
+    <LandingContent />
+  </div>
 </template>

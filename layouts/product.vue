@@ -6,7 +6,6 @@ const props = defineProps<{
 
 <template>
   <MainHeader :divider="false" />
-
   <div
     class="bg-white dark:bg-black md:sticky md:top-14 md:z-50"
     v-if="props.links != null"
@@ -17,7 +16,7 @@ const props = defineProps<{
     <UDivider />
   </div>
 
-  <UContainer class="container min-h-screen mb-8 flex flex-col gap-3 py-4">
+  <UContainer class="container min-h-screen flex flex-col gap-3 py-4">
     <slot />
   </UContainer>
 

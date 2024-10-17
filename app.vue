@@ -4,7 +4,9 @@
     <NuxtLoadingIndicator />
     <NuxtLayout>
       <NuxtPage />
-      <UNotifications />
     </NuxtLayout>
+
+    <UNotifications />
+    <UModals />
   </div>
 </template>
