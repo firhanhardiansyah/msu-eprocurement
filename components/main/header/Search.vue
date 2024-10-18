@@ -30,7 +30,7 @@ watch(isMobile, () => {
     <UButton
       icon="i-heroicons-magnifying-glass-20-solid"
       color="gray"
-      label="Search..."
+      :label="$t('general.search') + '...'"
       class="w-full md:w-64 lg:w-48"
       @click="isOpenSearchMenu"
     >

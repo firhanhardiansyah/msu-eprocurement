@@ -7,7 +7,15 @@
     "category": "Kategori",
     "product": "Produk",
     "product_found": "Produk ditemukan",
-    "product_category": "Kategori Produk"
+    "product_category": "Kategori Produk",
+    "get_deliveries": "Dapatkan pengiriman dengan",
+    "shopping_cart": "Keranjang Belanja",
+    "shopping_summary": "Ringkasan Belanja",
+    "shopping_remainder": "Sisa",
+    "price": "Harga",
+    "total_price": "Total Harga",
+    "total_shopping": "Total Belanja",
+    "search": "Cari"
   },
   "auth": {
     "sign_in": "Login",

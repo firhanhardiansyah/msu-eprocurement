@@ -7,18 +7,7 @@
       <UContainer>
         <div class="flex flex-wrap md:gap-4 lg:gap-0 py-4">
           <div class="w-full md:w-full lg:w-1/3 flex flex-col gap-4">
-            <h6 class="font-semibold">Categories</h6>
-            <!-- <div class="flex flex-wrap">
-              <div class="w-1/2" v-for="(item, index) in categories">
-                <ul class="flex flex-col gap-2" v-for="category in item">
-                  <li
-                    class="inline-block hover:text-primary-600 text-sm text-gray-500 mb-2"
-                  >
-                    <a href="#">{{ category?.title }}</a>
-                  </li>
-                </ul>
-              </div>
-            </div> -->
+            <UiChangeLang />
           </div>
 
           <UDivider class="py-4" />
@@ -31,7 +20,7 @@
               <div
                 class="flex items-center justify-center gap-1 text-slate-600 text-sm dark:text-white"
               >
-                Get deliveries with
+                {{ $t("general.get_deliveries") }}
                 <span class="text-primary font-semibold"> eCatalog </span>
               </div>
               <div class="flex">

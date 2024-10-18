@@ -39,7 +39,7 @@ const checkOut = () => {
           <div class="p-4 border-b-[1px] dark:border-zinc-800">
             <div class="flex items-center justify-between">
               <h3 class="text-base font-semibold dark:text-primary">
-                Shopping Cart
+                {{ $t("general.shopping_cart") }}
                 <span v-if="sortedCart.length > 0">({{ totalItems }})</span>
               </h3>
               <UButton
@@ -108,11 +108,13 @@ const checkOut = () => {
                               product.type === ProductType.storableProduct
                             "
                           >
-                            <span> Sisa </span>
+                            <span>
+                              {{ $t("general.shopping_remainder") }}
+                            </span>
                             {{ product.qty_available }}
                           </p>
                           <p
-                            class="text-sm text-gray-500 text-ellipsis overflow-hidden max-w-52 dark:text-zinc-200"
+                            class="text-sm text-gray-500 text-ellipsis overflow-hidden w-32 min-[425px]:w-40 md:w-48 lg:w-[200px] max-w-[200px] dark:text-zinc-200"
                           >
                             {{ product.name }}
                           </p>

@@ -7,7 +7,15 @@
     "category": "Category",
     "product": "Product",
     "product_found": "Product found",
-    "product_category": "Product Category"
+    "product_category": "Product Category",
+    "get_deliveries": "Get deliveries with",
+    "shopping_cart": "Shopping Cart",
+    "shopping_summary": "Shopping Summary",
+    "shopping_remainder": "Remaining Product",
+    "price": "Price",
+    "total_price": "Total Price",
+    "total_shopping": "Total Shopping",
+    "search": "Search"
   },
   "auth": {
     "sign_in": "Sign In",
