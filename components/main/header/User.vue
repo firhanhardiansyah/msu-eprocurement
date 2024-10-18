@@ -3,7 +3,7 @@ const { isAuthenticated, user, signOut } = useAuth();
 
 const { t } = useI18n();
 
-const userPageLink = ref([
+const userPageLink = computed(() => [
   [
     {
       label: t("auth.sign_in"),

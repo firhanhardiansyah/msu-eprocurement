@@ -1,7 +1,7 @@
 export const useNavbar = () => {
   const { t } = useI18n();
 
-  const links = [
+  const links = computed(() => [
     {
       label: t("general.home"),
       to: "/",
@@ -22,7 +22,7 @@ export const useNavbar = () => {
       label: t("general.contact"),
       to: "/contact",
     },
-  ];
+  ]);
 
   return {
     links,
