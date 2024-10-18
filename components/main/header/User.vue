@@ -1,5 +1,24 @@
 <script setup lang="ts">
 const { isAuthenticated, user, signOut } = useAuth();
+
+const { t } = useI18n();
+
+const userPageLink = ref([
+  [
+    {
+      label: t("auth.sign_in"),
+      icon: "i-heroicons-arrow-right-start-on-rectangle",
+      to: "/sign-in",
+    },
+  ],
+  [
+    {
+      label: t("auth.sign_up"),
+      icon: "i-heroicons-rocket-launch",
+      to: "/sign-up",
+    },
+  ],
+]);
 </script>
 
 <template>
@@ -7,9 +26,13 @@ const { isAuthenticated, user, signOut } = useAuth();
   <div v-if="!isAuthenticated" class="hidden lg:flex">
     <div class="border-l-[1px] dark:border-slate-600 pl-2">
       <div class="flex gap-2">
-        <UButton label="Sign In" color="gray" @click="navigateTo('/sign-in')" />
         <UButton
-          label="Sign Up"
+          :label="t('auth.sign_in')"
+          color="gray"
+          @click="navigateTo('/sign-in')"
+        />
+        <UButton
+          :label="t('auth.sign_up')"
           color="primary"
           variant="solid"
           @click="navigateTo('/sign-up')"
@@ -29,24 +52,7 @@ const { isAuthenticated, user, signOut } = useAuth();
 
       <template #panel>
         <div class="py-2">
-          <UVerticalNavigation
-            :links="[
-              [
-                {
-                  label: 'Sign In',
-                  icon: 'i-heroicons-arrow-right-start-on-rectangle',
-                  to: '/sign-in',
-                },
-              ],
-              [
-                {
-                  label: 'Sign Up',
-                  icon: 'i-heroicons-rocket-launch',
-                  to: '/sign-up',
-                },
-              ],
-            ]"
-          />
+          <UVerticalNavigation :links="userPageLink" />
         </div>
       </template>
     </UPopover>
