@@ -5,14 +5,6 @@ const props = defineProps({
     default: true,
   },
 });
-
-const { loadSession } = useAuth();
-const { loadCart } = useCart();
-
-onMounted(() => {
-  loadSession();
-  loadCart();
-});
 </script>
 
 <template>
