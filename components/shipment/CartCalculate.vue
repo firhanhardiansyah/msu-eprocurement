@@ -1,3 +1,7 @@
+<script setup lang="js">
+const { totalShoppingProducts, totalShoppingPrice, totalPriceOfAllPurchases } = useShipment();
+</script>
+
 <template>
   <UCard
     :ui="{
@@ -12,7 +16,9 @@
   >
     <template #header>
       <div class="px-4 pt-3">
-        <p class="text-base font-semibold">Ringkasan Belanja</p>
+        <p class="text-base font-semibold">
+          {{ $t("general.shopping_summary") }}
+        </p>
       </div>
     </template>
     <template #default>
@@ -20,13 +26,20 @@
         <div
           class="text-sm text-zinc-500 dark:text-zinc-300 flex justify-between"
         >
-          <p>Total Harga (1 Barang)</p>
-          <p>{{ currencyFormat(234) }}</p>
+          <p>
+            {{ $t("general.total_price") }}
+            <span>
+              ( {{ totalShoppingProducts }} {{ $t("general.product") }} )
+            </span>
+          </p>
+          <p>{{ currencyFormat(totalShoppingPrice) }}</p>
         </div>
         <UDivider class="py-3" />
         <div class="text-sm flex justify-between">
-          <p class="">Total Belanja</p>
-          <p class="font-bold">{{ currencyFormat(234) }}</p>
+          <p>{{ $t("general.total_shopping") }}</p>
+          <p class="font-bold">
+            {{ currencyFormat(totalPriceOfAllPurchases) }}
+          </p>
         </div>
       </div>
     </template>
