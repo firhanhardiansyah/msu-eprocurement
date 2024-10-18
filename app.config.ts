@@ -17,6 +17,22 @@ export default defineAppConfig({
       // Show toasts at the top right of the screen
       position: "top-0 bottom-[unset]",
     },
+
+    input: {
+      default: {
+        size: "lg",
+      },
+    },
+    select: {
+      default: {
+        size: "lg",
+      },
+    },
+    selectMenu: {
+      default: {
+        size: "lg",
+      },
+    },
   },
 
   site: {
