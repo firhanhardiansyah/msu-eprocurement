@@ -13,6 +13,9 @@ const props = defineProps({
     >,
     default: null,
   },
+  daterangepicker: {
+    type: Boolean,
+  },
 });
 
 const emit = defineEmits(["update:model-value", "close"]);
@@ -35,13 +38,20 @@ const attrs = {
 </script>
 
 <template>
+  <!-- Date Range Picker -->
   <VCalendarDatePicker
-    v-if="date && typeof date === 'object'"
+    v-if="daterangepicker"
     v-model.range="date"
     :columns="2"
-    v-bind="{ ...attrs, ...$attrs }"
+    v-bind:update-on-input="true"
+    @dayclick="(_, event) => event.target.blur()"
   />
-  <VCalendarDatePicker v-else v-model="date" v-bind="{ ...attrs, ...$attrs }" />
+  <VCalendarDatePicker
+    v-else
+    v-model="date"
+    v-bind:update-on-input="true"
+    @dayclick="(_, event) => event.target.blur()"
+  />
 </template>
 
 <style>

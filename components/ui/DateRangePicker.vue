@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { format, isSameDay, sub, type Duration } from "date-fns";
 
+const emit = defineEmits(["update:model-value", "close"]);
+
 const ranges = [
   { label: "Last 7 days", duration: { days: 7 } },
   { label: "Last 14 days", duration: { days: 14 } },
@@ -20,6 +22,8 @@ function isRangeSelected(duration: Duration) {
 
 function selectRange(duration: Duration) {
   selected.value = { start: sub(new Date(), duration), end: new Date() };
+
+  emit("update:model-value", selected.value);
 }
 
 const selectedStart = format(selected.value.start, "d MMM, yyy");
@@ -54,7 +58,23 @@ const dateModel = ref(`${selectedStart} - ${selectedEnd}`);
           />
         </div>
 
-        <UiDatePicker v-model="selected" @close="close" />
+        <UiDatePicker
+          v-model="selected"
+          daterangepicker
+          @update:model-value="
+              (date: any) => {
+                console.log('date');
+                console.log(date);
+
+
+      const selectedStart = format(date.start, 'd MMM, yyy');
+      const selectedEnd = format(date.end, 'd MMM, yyy');
+
+                dateModel = `${selectedStart} - ${selectedEnd}`;
+              }
+            "
+          @close="close"
+        />
       </div>
     </template>
   </UPopover>
