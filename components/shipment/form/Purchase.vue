@@ -2,18 +2,46 @@
 import type { FormSubmitEvent } from "#ui/types";
 import { object, string, type InferType } from "yup";
 
+interface FormState {
+  reason?: string;
+  project_name?: string;
+  vendor?: number;
+  analytic_account?: number;
+  delivery_date?: string;
+  company?: number;
+  warehouse?: number;
+  location?: number;
+  assessment_criteria?: number;
+  estimate_price?: number;
+}
+
+const state: FormState = reactive({
+  reason: undefined,
+  project_name: undefined,
+  vendor: undefined,
+  analytic_account: undefined,
+  delivery_date: undefined,
+  company: undefined,
+  warehouse: undefined,
+  location: undefined,
+  assessment_criteria: undefined,
+  estimate_price: undefined,
+});
+
 const schema = object({
-  email: string().email("Invalid email").required("Required"),
-  password: string()
-    .min(8, "Must be at least 8 characters")
-    .required("Required"),
+  reason: string().required("Required"),
+  project_name: string().required("Required"),
+  vendor: string().required("Required"),
+  analytic_account: string().required("Required"),
+  delivery_date: string().required("Required"),
+  company: string().required("Required"),
+  warehouse: string().required("Required"),
+  location: string().required("Required"),
+  assessment_criteria: string().required("Required"),
+  estimate_price: string().required("Required"),
 });
 
 type Schema = InferType<typeof schema>;
-
-const state = reactive({
-  vendor: undefined,
-});
 
 const {
   listVendor,
@@ -52,60 +80,92 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 // Date Picker
 import { format } from "date-fns";
 
-const date = ref(new Date());
+const deliveryDate = ref(new Date());
 
-const dateFormat = ref(format(date.value, "d MMM, yyy"));
+onMounted(() => {
+  state.delivery_date = format(deliveryDate.value, "y-MM-dd");
+});
 </script>
 
 <template>
   <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-    <UFormGroup label="Reason" name="reason">
-      <UTextarea variant="outline" placeholder="Input intent and purpose..." />
+    <UFormGroup label="Reason" name="reason" required>
+      <UTextarea
+        v-model="state.reason"
+        variant="outline"
+        placeholder="Insert intent and purpose..."
+        autocomplete="off"
+      />
     </UFormGroup>
 
-    <UFormGroup label="Project Name" name="project_name">
-      <UInput placeholder="Insert project name..." />
+    <UFormGroup label="Project Name" name="project_name" required>
+      <UInput
+        autocomplete="off"
+        placeholder="Insert project name..."
+        v-model="state.project_name"
+      />
     </UFormGroup>
 
-    <UFormGroup label="Vendor" name="vendor">
+    <UFormGroup label="Vendor" name="vendor" required>
       <USelectMenu
         placeholder="Select a vendor"
         v-model="selectedVendor"
         searchable
         searchable-placeholder="Search a vendor..."
         :options="listVendor"
+        @change="state.vendor = selectedVendor"
         value-attribute="id"
         option-attribute="name"
       />
     </UFormGroup>
 
-    <UFormGroup label="Analytic Account" name="account">
+    <UFormGroup label="Analytic Account" name="analytic_account" required>
       <USelectMenu
         placeholder="Select a account"
         v-model="selectedAccount"
         searchable
         searchable-placeholder="Search a account..."
         :options="listAccount"
+        @change="state.analytic_account = selectedAccount"
         value-attribute="id"
         option-attribute="name"
       />
     </UFormGroup>
 
-    <UFormGroup label="Order date to due date">
-      <UiDateRangePicker />
+    <UFormGroup label="Order date to due date" name="order_to_due_date">
+      <UiDateRangePicker
+        @update:model-value="
+          (value) => {
+            console.log(value);
+          }
+        "
+      />
     </UFormGroup>
 
-    <UFormGroup label="Delivery Date">
+    <UFormGroup label="Delivery Date" name="delivery_date" required>
       <UPopover :popper="{ placement: 'bottom-start' }">
-        <UInput class="w-full" v-model="dateFormat" />
+        <UButton
+          class="w-full"
+          size="lg"
+          color="white"
+          :ui="{
+            font: 'font-normal',
+          }"
+          :label="format(deliveryDate, 'd MMM, yyy')"
+        />
 
         <template #panel="{ close }">
-          <UiDatePicker v-model="date" is-required @close="close" />
+          <UiDatePicker
+            v-model="deliveryDate"
+            @update:model-value="(date: Date) => state.delivery_date = format(date, 'y-MM-dd')"
+            is-required
+            @close="close"
+          />
         </template>
       </UPopover>
     </UFormGroup>
 
-    <UFormGroup label="Company" name="company">
+    <UFormGroup label="Company" name="company" required>
       <USelectMenu
         placeholder="Select a company"
         v-model="selectedCompany"
@@ -114,10 +174,11 @@ const dateFormat = ref(format(date.value, "d MMM, yyy"));
         :options="listCompany"
         value-attribute="id"
         option-attribute="name"
+        @change="state.company = selectedCompany"
       />
     </UFormGroup>
 
-    <UFormGroup label="Warehouse" name="warehouse">
+    <UFormGroup label="Warehouse" name="warehouse" required>
       <USelectMenu
         placeholder="Select a warehouse"
         v-model="selectedWarehouse"
@@ -126,10 +187,11 @@ const dateFormat = ref(format(date.value, "d MMM, yyy"));
         :options="listWarehouse"
         value-attribute="id"
         option-attribute="name"
+        @change="state.warehouse = selectedWarehouse"
       />
     </UFormGroup>
 
-    <UFormGroup label="Location" name="location">
+    <UFormGroup label="Location" name="location" required>
       <USelectMenu
         placeholder="Select a location"
         v-model="selectedLocation"
@@ -141,7 +203,7 @@ const dateFormat = ref(format(date.value, "d MMM, yyy"));
       />
     </UFormGroup>
 
-    <UFormGroup label="Assessment Criteria" name="assessment_criteria">
+    <UFormGroup label="Assessment Criteria" name="assessment_criteria" required>
       <USelectMenu
         placeholder="Select a assessment criteria"
         v-model="selectedAssessmentCriteria"
@@ -153,7 +215,7 @@ const dateFormat = ref(format(date.value, "d MMM, yyy"));
       />
     </UFormGroup>
 
-    <UFormGroup label="Estimate Price" name="estimate_price">
+    <UFormGroup label="Estimate Price" name="estimate_price" required>
       <UInput
         placeholder="Insert estimate price..."
         v-model.number="formattedPrice"
