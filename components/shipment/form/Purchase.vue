@@ -13,6 +13,7 @@ interface FormState {
   location?: number;
   assessment_criteria?: number;
   estimate_price?: number;
+  attachment?: any;
 }
 
 const state: FormState = reactive({
@@ -26,19 +27,21 @@ const state: FormState = reactive({
   location: undefined,
   assessment_criteria: undefined,
   estimate_price: undefined,
+  attachment: undefined,
 });
 
 const schema = object({
-  reason: string().required("Required"),
-  project_name: string().required("Required"),
-  vendor: string().required("Required"),
-  analytic_account: string().required("Required"),
-  delivery_date: string().required("Required"),
-  company: string().required("Required"),
-  warehouse: string().required("Required"),
-  location: string().required("Required"),
-  assessment_criteria: string().required("Required"),
-  estimate_price: string().required("Required"),
+  reason: string().required("Reason Required"),
+  project_name: string().required("Project Name Required"),
+  vendor: string().required("Vendor Required"),
+  analytic_account: string().required("Analytic Account Required"),
+  delivery_date: string().required("Delivery Date Required"),
+  company: string().required("Company Required"),
+  warehouse: string().required("Warehouse Required"),
+  location: string().required("Location Required"),
+  assessment_criteria: string().required("Assessment Criteria Required"),
+  estimate_price: string().required("Estimate Price Required"),
+  attachment: string().required("Attachment Required"),
 });
 
 type Schema = InferType<typeof schema>;
@@ -59,17 +62,17 @@ const selectedWarehouse = ref();
 const selectedLocation = ref();
 const selectedAssessmentCriteria = ref();
 
-const formattedPrice = ref("");
+const estimatePriceFormat = ref("");
 
-watch(formattedPrice, () => {
-  formatPrice();
-});
+const priceFormat = (value: any) => {
+  // Hanya izinkan angka
+  const rawValue = value.replace(/\D/g, "");
 
-const formatPrice = () => {
-  const cleanValue = formattedPrice.value.replace(/\D/g, "");
-  const value = Number(cleanValue);
+  // Format nilai ke mata uang
+  estimatePriceFormat.value = currencyFormat(rawValue);
 
-  formattedPrice.value = currencyFormat(value);
+  // Set nilai ke dalam form estimate price
+  state.estimate_price = +rawValue;
 };
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
@@ -200,6 +203,7 @@ onMounted(() => {
         :options="listLocation"
         value-attribute="id"
         option-attribute="name"
+        @change="state.location = selectedLocation"
       />
     </UFormGroup>
 
@@ -212,18 +216,25 @@ onMounted(() => {
         :options="listAssessmentCriteria"
         value-attribute="id"
         option-attribute="name"
+        @change="state.assessment_criteria = selectedAssessmentCriteria"
       />
     </UFormGroup>
 
     <UFormGroup label="Estimate Price" name="estimate_price" required>
       <UInput
         placeholder="Insert estimate price..."
-        v-model.number="formattedPrice"
+        v-model="estimatePriceFormat"
+        @keyup="priceFormat(estimatePriceFormat)"
       />
     </UFormGroup>
 
     <UFormGroup label="Attachment" name="attachment">
-      <UInput type="file" size="sm" icon="i-heroicons-folder" />
+      <UInput
+        type="file"
+        size="sm"
+        icon="i-heroicons-folder"
+        v-model="state.attachment"
+      />
     </UFormGroup>
 
     <UButton type="submit" size="lg" block> Submit </UButton>
