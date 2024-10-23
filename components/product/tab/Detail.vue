@@ -3,7 +3,7 @@ const props = defineProps<{
   item?: Product;
 }>();
 
-const { changedNameProductType } = useProduct();
+const { changeProductType } = useProduct();
 
 const items = [
   {
@@ -12,7 +12,7 @@ const items = [
   },
   {
     title: "Product Type",
-    value: changedNameProductType(props.item?.type),
+    value: changeProductType(props.item?.type),
   },
   {
     title: "Material Code",
