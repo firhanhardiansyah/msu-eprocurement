@@ -4,7 +4,7 @@ const props = defineProps<{
   productCategorySlug: string;
 }>();
 
-const { getProductByCategoryFinally, changedNameProductType } = useProduct();
+const { getProductByCategory, changeProductType } = useProduct();
 
 const productCurrentPage = ref(1);
 
@@ -16,8 +16,7 @@ const {
   status: productsStatus,
   error: productsError,
 } = await useAsyncData(
-  () =>
-    getProductByCategoryFinally(props.productCategorySlug, offset.value, limit),
+  () => getProductByCategory(props.productCategorySlug, offset.value, limit),
   {
     watch: [productCurrentPage],
   }
@@ -96,37 +95,13 @@ const toProductDetail = (productSlug?: string) => {
 
       <!-- Products by Category -->
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-        <UCard
-          v-for="product in productsData?.data?.product_list"
-          :ui="{
-            header: {
-              padding: 'p-0 sm:p-0',
-            },
-            body: {
-              padding: '',
-            },
-          }"
-          class="cursor-pointer"
-          @click="toProductDetail(product?.url_slug)"
-        >
-          <template #header>
-            <div class="bg-gray-200 w-full h-40 rounded-t-lg" />
-          </template>
-
-          <div class="px-3 pt-2 pb-3">
-            <div class="text-sm line-clamp-2 min-h-10">{{ product?.name }}</div>
-            <div class="text-sm text-gray-500 min-h-10">
-              <p>{{ changedNameProductType(product?.type) }}</p>
-            </div>
-            <div class="text-base font-semibold text-primary py-1">
-              {{ currencyFormat(product.standard_price || 0) }}
-            </div>
-            <div class="flex flex-row gap-1 justify-start items-center">
-              <Icon name="i-heroicons-star-solid" class="text-yellow-500" />
-              <p class="text-sm">0</p>
-            </div>
-          </div>
-        </UCard>
+        <UiProductCard
+          v-for="(product, index) in productsData?.data?.product_list"
+          :title="product?.name"
+          :subtitle="changeProductType(product?.type)"
+          :price="product?.standard_price"
+          @to="toProductDetail(product?.url_slug)"
+        />
       </div>
 
       <div class="flex justify-center">
