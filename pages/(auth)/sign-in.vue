@@ -79,16 +79,18 @@ const testCookie = () => {
   }
 };
 
-const user = useCookie("userInfo", {
+const user = useCookie("user-info", {
   // Here we're using the default option to assign a default value for the cookie
   default: () => ({ score: 0 }),
   // And here we say that we don't want to watch for data changes in the cookie ref
   watch: false,
+  expires: new Date(Date.now() + 60 * 60 * 10),
 });
 
 if (user.value && user.value !== null) {
   user.value.score++; // userInfo cookie not updated with this change
 }
+user;
 </script>
 
 <template>
