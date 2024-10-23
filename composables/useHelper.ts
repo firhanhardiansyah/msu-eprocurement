@@ -1,10 +1,12 @@
 export const useHelper = () => {
   // Screen Size
   const isMobile = ref<boolean>(false);
+  const isTablet = ref<boolean>(false);
 
   onMounted(() => {
     const checkScreenSize = () => {
-      isMobile.value = window.innerWidth <= 640;
+      isMobile.value = window.innerWidth < 640;
+      isTablet.value = window.innerWidth >= 640 && window.innerWidth < 1024;
     };
 
     // Periksa ukuran layar saat komponen dimuat
@@ -139,6 +141,7 @@ export const useHelper = () => {
 
   return {
     isMobile,
+    isTablet,
     toKebabCase,
     toCapitalCase,
     isString,
