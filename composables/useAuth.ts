@@ -6,8 +6,8 @@ export const useAuth = () => {
   const setToken = (val?: string) => {
     const myCookie = useCookie<string | undefined | null>("auth-token", {
       expires: new Date(Date.now() + 60 * 60 * 1000),
-      secure: true,
-      watch: true,
+      // secure: true,
+      watch: false,
     });
 
     if (import.meta.client) {
