@@ -6,7 +6,7 @@
     <div class="bg-primary-100 dark:bg-black/20">
       <UContainer>
         <div class="flex flex-wrap md:gap-4 lg:gap-0 py-4">
-          <div class="w-full md:w-full lg:w-1/3 flex flex-col gap-4">
+          <div class="w-full md:w-1/3 flex flex-col gap-4">
             <UiChangeLang />
           </div>
 
