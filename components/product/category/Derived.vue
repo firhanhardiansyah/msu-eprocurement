@@ -48,7 +48,7 @@ const { toProductCategory } = useProduct();
       <div class="flex flex-col items-center justify-center">
         <article class="prose prose-slate flex flex-col items-center">
           <img
-            src="/images/illustration/void.svg"
+            src="/images/illustration/empty_item.svg"
             alt="No Category"
             class="w-52"
           />
