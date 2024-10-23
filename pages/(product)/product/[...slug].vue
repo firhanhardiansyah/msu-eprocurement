@@ -34,8 +34,13 @@ if (slug.length <= 2) {
   });
 }
 
-const breadcrumbItemOveridesComputed = computed(() => {
+const breadcrumbItemOverides = computed(() => {
   const items: any[] = [undefined];
+
+  items.push({
+    label: t("general.product_category"),
+    to: "/category",
+  });
 
   slug.map((url_slug, index) => {
     let goToPage = "";
@@ -58,14 +63,6 @@ const breadcrumbItemOveridesComputed = computed(() => {
 
   return items;
 });
-
-const breadcrumbItemOverides = ref([
-  {
-    label: t("general.product_category"),
-    to: "/category",
-  },
-  ...breadcrumbItemOveridesComputed.value,
-]);
 
 const links = useBreadcrumbItems({
   overrides: breadcrumbItemOverides.value,
