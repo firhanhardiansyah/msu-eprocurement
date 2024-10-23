@@ -60,44 +60,9 @@ const onError = async (event: FormErrorEvent) => {
   element?.focus();
   element?.scrollIntoView({ behavior: "smooth", block: "center" });
 };
-
-const testCookie = () => {
-  // document.cookie =
-  const cookies = document.cookie.split(";");
-
-  for (const cookie of cookies) {
-    const eqPos = cookie.indexOf("=");
-
-    const name = eqPos > -1 ? cookie.substring(0, eqPos) : cookie;
-
-    console.log("cookies");
-    console.log(name);
-    document.cookie =
-      "username=John Doe; expires=Wed, 24 Oct 2024 01:00:00 UTC; path=/";
-
-    // document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT';
-  }
-};
-
-const user = useCookie("user-info", {
-  // Here we're using the default option to assign a default value for the cookie
-  default: () => ({ score: 0 }),
-  // And here we say that we don't want to watch for data changes in the cookie ref
-  watch: false,
-  expires: new Date(Date.now() + 60 * 60 * 10),
-});
-
-if (user.value && user.value !== null) {
-  user.value.score++; // userInfo cookie not updated with this change
-}
-user;
 </script>
 
 <template>
-  <UButton label="cookie" @click="testCookie()" />
-  <ClientOnly>
-    <div>User score: {{ user?.score }}</div>
-  </ClientOnly>
   <NuxtLayout name="auth">
     <UCard>
       <div class="flex flex-col gap-2 items-start">
