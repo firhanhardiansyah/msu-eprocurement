@@ -180,7 +180,11 @@ const isOpenFilter = ref(false);
           :title="product?.name"
           :subtitle="changeProductType(product?.type)"
           :price="product?.standard_price"
-          @to="navigateTo(`/product/commodity-4kei/${product?.url_slug}`)"
+          @to="
+            navigateTo(
+              `/product/${product?.categ_id?.parent?.url_slug}/${product?.categ_id?.url_slug}/${product?.url_slug}`
+            )
+          "
         />
       </div>
 

@@ -1,11 +1,13 @@
 interface Category {
   id?: number;
   name?: string;
+  url_slug?: string;
   parent?: ParentCategory;
 }
 interface ParentCategory {
   id?: number;
   name?: string;
+  url_slug?: string;
   parent?: ParentCategory;
 }
 
