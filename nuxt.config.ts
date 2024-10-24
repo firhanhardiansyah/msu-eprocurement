@@ -28,6 +28,13 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: { lang: "en" },
       link: [{ rel: "icon", href: "/logo.svg", type: "image/svg+xml" }],
+      meta: [
+        {
+          name: "viewport",
+          content:
+            "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
+        },
+      ],
     },
   },
 
