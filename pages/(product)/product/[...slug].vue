@@ -5,13 +5,8 @@ definePageMeta({
 
 const { t } = useI18n();
 
-const {
-  getFirstElement,
-  slugOverride,
-  toCapitalCase,
-  removeEmptyElements,
-  getLastElement,
-} = useHelper();
+const { getFirstElement, toCapitalCase, removeEmptyElements, getLastElement } =
+  useHelper();
 
 const route = useRoute();
 const slug = removeEmptyElements(route.params.slug as string[]);
@@ -56,7 +51,7 @@ const breadcrumbItemOverides = computed(() => {
         break;
     }
     items.push({
-      label: toCapitalCase(slugOverride(url_slug)),
+      label: toCapitalCase(url_slug),
       to: goToPage,
     });
   });
