@@ -1,6 +1,12 @@
 interface Category {
   id?: number;
   name?: string;
+  parent?: ParentCategory;
+}
+interface ParentCategory {
+  id?: number;
+  name?: string;
+  parent?: ParentCategory;
 }
 
 interface UOM {
