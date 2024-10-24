@@ -165,6 +165,8 @@ const isOpenFilter = ref(false);
       </div>
     </template>
 
+    <!-- ? Chore  -->
+    <!-- ? navigasi ke halaman detail produk masih menunggu penambahan slug category & slug sub category dari RESTapi -->
     <template
       v-if="
         productsStatus === 'success' && productsData?.data?.total_data !== 0
@@ -178,6 +180,7 @@ const isOpenFilter = ref(false);
           :title="product?.name"
           :subtitle="changeProductType(product?.type)"
           :price="product?.standard_price"
+          @to="navigateTo(`/product/commodity-4kei/${product?.url_slug}`)"
         />
       </div>
 
