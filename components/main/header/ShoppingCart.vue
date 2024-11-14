@@ -24,19 +24,21 @@ const checkOut = () => {
 
 <template>
   <div>
-    <UChip :text="totalItems" size="2xl" :show="totalItems > 0">
-      <UButton
-        icon="i-heroicons-shopping-cart"
-        color="gray"
-        @click="isOpen = true"
-      />
-    </UChip>
+    <UTooltip :text="$t('general.shopping_cart')" :popper="{ arrow: true }">
+      <UChip :text="totalItems" size="2xl" :show="totalItems > 0">
+        <UButton
+          icon="i-heroicons-shopping-cart"
+          color="gray"
+          @click="isOpen = true"
+        />
+      </UChip>
+    </UTooltip>
 
     <USlideover v-model="isOpen">
       <template #default>
         <div class="flex flex-col h-screen">
           <!-- Header -->
-          <div class="p-4 border-b-[1px] dark:border-zinc-800">
+          <div class="p-4 border-b dark:border-zinc-800">
             <div class="flex items-center justify-between">
               <h3 class="text-base font-semibold dark:text-primary">
                 {{ $t("general.shopping_cart") }}

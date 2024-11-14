@@ -7,7 +7,7 @@ const props = defineProps<{
 <template>
   <MainHeader :divider="false" />
   <div
-    class="bg-white dark:bg-black md:sticky md:top-14 md:z-50"
+    class="bg-white dark:bg-black md:sticky md:top-14 md:z-10"
     v-if="props.links != null"
   >
     <UContainer class="py-2">

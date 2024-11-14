@@ -59,7 +59,7 @@ onMounted(() => {
   );
 
   if (filter !== null) {
-    companySelected.value = filter![0].slug ?? "";
+    companySelected.value = filter![0].url_slug ?? "";
   }
 });
 
@@ -110,7 +110,7 @@ const isOpenFilter = ref(false);
             placeholder="Select Company"
             :options="companiesData?.data"
             v-model="companySelected"
-            value-attribute="slug"
+            value-attribute="url_slug"
             option-attribute="name"
             class="w-full md:w-auto"
           />

@@ -51,6 +51,7 @@ export const useAuth = () => {
 
   return {
     user,
+    token,
     isAuthenticated,
     loadSession,
     signIn,

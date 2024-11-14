@@ -10,7 +10,7 @@ const props = defineProps({
 <template>
   <NuxtLink to="/">
     <div class="flex justify-center items-center">
-      <NuxtImg src="/msu_icon.png" width="32" height="32" />
+      <NuxtImg src="/msu_icon.png" alt="MSU Icon" width="32" height="32" />
       <p v-if="props.showLabel" class="mx-2">
         <span class="text-primary-500 dark:text-primary-300">e</span>
         <span class="font-bold text-primary dark:text-primary-400"

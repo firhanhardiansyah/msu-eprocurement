@@ -18,5 +18,6 @@ onMounted(() => {
 
     <UNotifications />
     <UModals />
+    <USlideovers />
   </div>
 </template>

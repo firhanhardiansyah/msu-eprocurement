@@ -34,7 +34,12 @@ const dateModel = ref(`${selectedStart} - ${selectedEnd}`);
 
 <template>
   <UPopover :popper="{ placement: 'bottom-start' }">
-    <UInput class="w-full" v-model:model-value="dateModel" />
+    <UButton
+      color="gray"
+      variant="soft"
+      :label="dateModel"
+      trailing-icon="i-heroicons-chevron-down-20-solid"
+    />
 
     <template #panel="{ close }">
       <div

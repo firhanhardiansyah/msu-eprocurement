@@ -56,6 +56,7 @@ interface Product {
   quantity: number = 0;
   addedAt: Date | string | null; // Null safety dan handling string
   checked: boolean;
+  url_product?: string;
 }
 
 interface ProductData {

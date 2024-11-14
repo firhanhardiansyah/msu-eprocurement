@@ -27,6 +27,13 @@ export const useCart = () => {
       (cat) => cat.category === product.categ_id?.name
     );
 
+    const categorySlug = product?.categ_id?.parent?.url_slug;
+    const subCategorySlug = product?.categ_id?.url_slug;
+    const productSlug = product?.url_slug;
+
+    // Menambahkan url path untuk redirect ke produk item
+    product.url_product = `/product/${categorySlug}/${subCategorySlug}/${productSlug}`;
+
     // Ensure quantity is a valid number
     const productWithQuantity = {
       ...product,

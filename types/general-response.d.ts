@@ -1,6 +1,6 @@
 interface GeneralResponse {
   id?: int;
   name?: string;
-  slug?: string;
+  url_slug?: string;
   checked?: boolean;
 }

@@ -33,7 +33,7 @@ const state: FormState = reactive({
 const schema = object({
   reason: string().required("Reason Required"),
   project_name: string().required("Project Name Required"),
-  vendor: string().required("Vendor Required"),
+  // vendor: string().required("Vendor Required"),
   analytic_account: string().required("Analytic Account Required"),
   delivery_date: string().required("Delivery Date Required"),
   company: string().required("Company Required"),
@@ -55,7 +55,11 @@ const {
   listAssessmentCriteria,
 } = usePurchase();
 
-const selectedVendor = ref();
+const { getVendors } = usePurchaseRequisition();
+
+const { vendors } = getVendors();
+
+const selectedVendor = ref([]);
 const selectedAccount = ref();
 const selectedCompany = ref();
 const selectedWarehouse = ref();
@@ -112,14 +116,21 @@ onMounted(() => {
     <UFormGroup label="Vendor" name="vendor" required>
       <USelectMenu
         placeholder="Select a vendor"
+        multiple
         v-model="selectedVendor"
         searchable
         searchable-placeholder="Search a vendor..."
-        :options="listVendor"
-        @change="state.vendor = selectedVendor"
+        :options="vendors"
         value-attribute="id"
         option-attribute="name"
-      />
+      >
+        <!-- <template #label>
+          <span v-if="selectedVendor.length" class="truncate">
+            {{ selectedVendor }}
+          </span>
+          <span v-else>Select people</span>
+        </template> -->
+      </USelectMenu>
     </UFormGroup>
 
     <UFormGroup label="Analytic Account" name="analytic_account" required>

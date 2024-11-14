@@ -32,9 +32,13 @@ const { cartShipment } = useShipment();
 
           <div class="flex-1 flex flex-col lg:flex-row lg:justify-between">
             <!-- Product Name -->
-            <p class="text-sm text-zinc-500 dark:text-zinc-300">
-              {{ product?.name }}
-            </p>
+            <NuxtLink :to="product?.url_product">
+              <p
+                class="text-sm text-zinc-500 dark:text-zinc-300 cursor-pointer"
+              >
+                {{ product?.name }}
+              </p>
+            </NuxtLink>
 
             <!-- Price -->
             <p class="text-sm font-semibold flex gap-1">
