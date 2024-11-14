@@ -128,4 +128,7 @@ export default defineNuxtConfig({
     defaultLocale: "id_ID",
     strategy: "no_prefix",
   },
+
+  // Plugins
+  plugins: ["~/plugins/api", "~/plugins/chart"],
 });
