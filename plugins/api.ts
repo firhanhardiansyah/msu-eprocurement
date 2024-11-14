@@ -2,6 +2,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   const _config = useRuntimeConfig();
   const _url = _config.public.apiBase;
 
+  const auth = useAuth();
+
   const api = $fetch.create({
     baseURL: _url,
     headers: {
@@ -13,22 +15,19 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
 
   const apiAuthorized = $fetch.create({
-    baseURL: "https://api.nuxt.com",
+    baseURL: _url,
+    headers: {
+      "Content-Type": "application/json",
+    },
     onRequest({ request, options, error }) {
-      // if (session.value?.token) {
-      //   const headers = options.headers ||= {}
-      //   if (Array.isArray(headers)) {
-      //     headers.push(['Authorization', `Bearer ${session.value?.token}`])
-      //   } else if (headers instanceof Headers) {
-      //     headers.set('Authorization', `Bearer ${session.value?.token}`)
-      //   } else {
-      //     headers.Authorization = `Bearer ${session.value?.token}`
-      //   }
-      // }
+      if (auth.token.value) {
+        // note that this relies on ofetch >= 1.4.0 - you may need to refresh your lockfile
+        options.headers.set("Authorization", `Bearer ${auth.token.value}`);
+      }
     },
     async onResponseError({ response }) {
-      if (response.status === 401) {
-        await nuxtApp.runWithContext(() => navigateTo("/login"));
+      if (response.status === 403) {
+        await nuxtApp.runWithContext(() => navigateTo("/sign-in"));
       }
     },
   });
