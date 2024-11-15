@@ -4,11 +4,7 @@
     style="--width: 300px"
   >
     <!-- Panel Header -->
-    <div
-      class="h-14 bg-white dark:bg-black border-b border-gray-200 px-4 flex items-center justify-center"
-    >
-      <PanelSideBarHeader />
-    </div>
+    <PanelSideBarHeader />
 
     <PanelSideBarMenu />
   </div>

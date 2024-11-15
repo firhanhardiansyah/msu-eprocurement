@@ -55,19 +55,11 @@ const { isDesktop } = useHelper();
     :class="[isDesktop && 'sticky']"
   >
     <div class="px-4 flex gap-3">
-      <UiDateRangePicker />
+      <UiDateRangePicker size="sm" />
 
       <!-- Daily Or Weekly -->
       <USelectMenu
         size="sm"
-        :ui="{
-          color: {
-            white: {
-              none: 'bg-gray-50',
-            },
-          },
-        }"
-        variant="none"
         class="text-gray-500"
         placeholder="Daily"
         :options="['Daily', 'Weekly']"

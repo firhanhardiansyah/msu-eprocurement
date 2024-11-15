@@ -18,7 +18,9 @@ watch(isDesktop, () => {
 </script>
 
 <template>
-  <div class="h-14 bg-white dark:bg-black border-b py-3 px-4">
+  <div
+    class="h-14 bg-white dark:bg-black border-b dark:border-gray-800 py-3 px-4"
+  >
     <div class="flex items-center justify-between">
       <!-- Left -->
       <div class="flex gap-3 items-center">
@@ -38,6 +40,7 @@ watch(isDesktop, () => {
         <UChip text="99" size="xl">
           <UButton icon="i-heroicons-bell" color="gray" />
         </UChip>
+        <UiDarkMode />
       </div>
       <!-- End Right -->
     </div>

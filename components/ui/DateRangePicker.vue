@@ -1,4 +1,18 @@
 <script setup lang="ts">
+import type { ButtonColor, ButtonSize } from "#ui/types";
+
+const props = withDefaults(
+  defineProps<{
+    color?: ButtonColor;
+    size?: ButtonSize;
+    block?: boolean;
+  }>(),
+  {
+    color: "white" as ButtonColor,
+    size: "lg" as ButtonSize,
+  }
+);
+
 import { format, isSameDay, sub, type Duration } from "date-fns";
 
 const emit = defineEmits(["update:model-value", "close"]);
@@ -35,9 +49,13 @@ const dateModel = ref(`${selectedStart} - ${selectedEnd}`);
 <template>
   <UPopover :popper="{ placement: 'bottom-start' }">
     <UButton
-      color="gray"
-      variant="soft"
+      :size="props.size"
+      :color="props.color"
       :label="dateModel"
+      :block="block"
+      :ui="{
+        block: 'w-full justify-between items-start',
+      }"
       trailing-icon="i-heroicons-chevron-down-20-solid"
     />
 

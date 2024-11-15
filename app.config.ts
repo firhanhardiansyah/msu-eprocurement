@@ -7,7 +7,7 @@ export default defineAppConfig({
         padding: "p-4",
       },
       footer: {
-        base: "bg-gray-100 rounded-b-lg",
+        base: "bg-gray-100 dark:bg-gray-800 rounded-b-lg",
       },
       ring: "",
       divide: "divide-y divide-gray-100 dark:divide-gray-800",

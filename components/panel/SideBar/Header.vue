@@ -29,20 +29,24 @@ const selected = ref(people[0]);
 </script>
 
 <template>
-  <USelectMenu
-    v-model="selected"
-    :options="people"
-    class="w-full"
-    :variant="props.variant"
-    :color="props.color"
-    :size="props.size"
+  <div
+    class="h-14 bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 px-4 flex items-center justify-center"
   >
-    <template #leading>
-      <NuxtImg v-bind:src="selected.avatar.src" width="24" height="24" />
-    </template>
+    <USelectMenu
+      v-model="selected"
+      :options="people"
+      class="w-full"
+      :variant="props.variant"
+      :color="props.color"
+      :size="props.size"
+    >
+      <template #leading>
+        <NuxtImg v-bind:src="selected.avatar.src" width="24" height="24" />
+      </template>
 
-    <template #label>
-      <span class="font-medium">{{ selected.label }}</span>
-    </template>
-  </USelectMenu>
+      <template #label>
+        <span class="font-medium">{{ selected.label }}</span>
+      </template>
+    </USelectMenu>
+  </div>
 </template>

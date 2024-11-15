@@ -153,6 +153,7 @@ onMounted(() => {
             console.log(value);
           }
         "
+        block
       />
     </UFormGroup>
 
