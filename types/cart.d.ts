@@ -1,7 +1,7 @@
 interface CartItem {
   category: string;
   subCategories: CartSubItem[];
-  createdAt: number;
+  createdAt: Date | string | null;
   checked: boolean;
 }
 

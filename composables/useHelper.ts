@@ -85,13 +85,13 @@ export const useHelper = () => {
    * @param array - The array from which to retrieve the first element.
    * @returns The first element of the array or undefined if the array is empty.
    */
-  function getFirstElement<T>(array: T[]): T | undefined {
-    // Check if the array is empty
-    if (array.length === 0) {
-      return undefined; // Return undefined if the array is empty
+  function getFirstElement<T>(array: T[] | null | undefined): T | undefined {
+    // Check if the array is not empty
+    if (array && Array.isArray(array) && array.length > 0) {
+      return array[0]; // Return undefined if the array is empty
     }
     // Return the first element of the array
-    return array[0];
+    return undefined;
   }
 
   /**
@@ -104,6 +104,18 @@ export const useHelper = () => {
     return array.filter(
       (item) => item !== null && item !== undefined && item !== ""
     );
+  }
+
+  /**
+   * Checks if the given index is the last index of the array.
+   *
+   * @template T - The type of elements in the array.
+   * @param array - The array to check against.
+   * @param index - The index to verify.
+   * @returns `true` if the index is the last index of the array, `false` otherwise.
+   */
+  function isLastIndex<T>(array: T[], index: number): boolean {
+    return index === array.length - 1;
   }
 
   /**
@@ -150,6 +162,7 @@ export const useHelper = () => {
     isString,
     getFirstElement,
     getLastElement,
+    isLastIndex,
     removeEmptyElements,
     slugOverride,
     slugOverrides,

@@ -3,6 +3,9 @@ const props = defineProps({
   bgCanvas: {
     type: Boolean,
   },
+  padded: {
+    type: Boolean,
+  },
 });
 </script>
 
@@ -10,9 +13,15 @@ const props = defineProps({
   <MainHeader />
 
   <div :class="[props.bgCanvas && 'bg-gray-100 dark:bg-inherit']">
-    <UContainer class="min-h-screen">
+    <template v-if="props.padded">
       <slot />
-    </UContainer>
+    </template>
+
+    <template v-else>
+      <UContainer class="min-h-screen">
+        <slot />
+      </UContainer>
+    </template>
   </div>
 
   <MainFooter />

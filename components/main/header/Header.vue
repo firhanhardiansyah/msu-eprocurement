@@ -9,7 +9,7 @@ const props = defineProps({
 
 <template>
   <header class="bg-white dark:bg-black sticky top-0 z-50">
-    <UContainer class="container mx-auto flex h-14 max-w-screen-2xl">
+    <UContainer class="flex h-14">
       <div class="flex justify-between w-full gap-2 items-center">
         <UiLogo />
 

@@ -11,14 +11,6 @@ export const useNavbar = () => {
       to: "/category",
     },
     {
-      label: t("general.announcement"),
-      to: "/announcements",
-    },
-    {
-      label: t("general.news"),
-      to: "/news",
-    },
-    {
       label: t("general.contact"),
       to: "/contact",
     },

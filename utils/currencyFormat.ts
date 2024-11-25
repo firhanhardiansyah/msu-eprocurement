@@ -22,3 +22,13 @@ export function currencyFormat(
     .replace(/^(\D+)/, "$1 ")
     .replace(/\s+/, "");
 }
+
+export function parseCurrency(currency: string | null | undefined): number {
+  if (currency === null || currency === undefined) {
+    return 0; // Nilai default jika input null atau undefined
+  }
+
+  // Hapus simbol mata uang, koma, atau spasi
+  const sanitized = currency.replace(/[^0-9]/g, "");
+  return parseFloat(sanitized);
+}

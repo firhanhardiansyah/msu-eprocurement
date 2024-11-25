@@ -20,7 +20,7 @@ definePageMeta({
         </div>
 
         <div class="md:w-6/12 xl:w-5/12">
-          <ShipmentCartPurchase />
+          <ShipmentPurchaseForm />
         </div>
       </div>
     </div>

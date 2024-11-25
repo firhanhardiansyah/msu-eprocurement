@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const isOpen = ref(false);
 
+const { isLastIndex } = useHelper();
+
 const {
   totalItems,
   sortedCart,
@@ -8,6 +10,7 @@ const {
   removeFromCart,
   addToCart,
   toggleCategory,
+  toggleSubCategory,
   toggleProduct,
   checkOutProduct,
 } = useCart();
@@ -57,105 +60,104 @@ const checkOut = () => {
             class="flex-grow overflow-y-auto bg-gray-100 dark:bg-zinc-900"
             :class="[sortedCart.length == 0 && 'bg-white']"
           >
-            <div v-if="sortedCart.length > 0">
+            <template v-if="sortedCart.length > 0">
               <div
                 v-for="(categoryItem, categoryIndex) in sortedCart"
-                :key="categoryItem.category"
-                class="bg-white dark:bg-neutral-900 mb-3"
+                class="bg-white dark:bg-neutral-900 px-4 py-3 mb-4"
               >
-                <UCheckbox
-                  class="px-4 py-3"
-                  :ui="{
-                    label: 'font-semibold cursor-pointer',
-                  }"
-                  :label="categoryItem.category"
-                  v-model="categoryItem.checked"
-                  @update:model-value="toggleCategory(categoryItem, $event)"
-                />
+                <!-- Category Title -->
+                <div class="">
+                  <p class="text-base font-bold">{{ categoryItem.category }}</p>
+                </div>
+                <!-- End Category Title -->
+
+                <!-- Sub Category -->
                 <div
                   v-for="(
                     subCategoryItem, subCategoryIndex
                   ) in categoryItem.subCategories"
-                  :key="subCategoryItem.subCategory"
+                  class="flex flex-col gap-3"
                 >
+                  <UCheckbox
+                    :ui="{
+                      label: 'font-semibold cursor-pointer',
+                    }"
+                    class="pt-3"
+                    :label="subCategoryItem.subCategory"
+                    v-model="subCategoryItem.checked"
+                    @update:model-value="
+                      toggleSubCategory(categoryItem, subCategoryItem, $event)
+                    "
+                  />
+
                   <div
-                    v-for="(product, productIndex) in subCategoryItem.products"
+                    v-for="product in subCategoryItem.products"
                     :key="product.id"
-                    class="px-4"
                   >
-                    <div class="py-2 flex justify-between gap-2">
+                    <div class="flex justify-between gap-3">
                       <div class="flex gap-3">
                         <!-- Select Product -->
                         <UCheckbox
                           v-model="product.checked"
-                          @update:model-value="
-                            toggleProduct(
-                              categoryItem,
-                              subCategoryItem,
-                              product,
-                              $event
-                            )
-                          "
+                          @update:model-value="toggleProduct(product, $event)"
                         />
 
                         <!-- Image -->
                         <div class="bg-gray-500 h-12 w-12 rounded-md" />
-
-                        <!-- Product Description -->
-                        <div class="flex-1">
-                          <p
-                            class="font-bold text-xs text-primary-500"
-                            v-if="
-                              (product.qty_available ?? 0) < 4 &&
-                              product.type === ProductType.storableProduct
-                            "
-                          >
-                            <span>
-                              {{ $t("general.shopping_remainder") }}
-                            </span>
-                            {{ product.qty_available }}
-                          </p>
-                          <p
-                            class="text-sm text-gray-500 text-ellipsis overflow-hidden w-32 min-[425px]:w-40 md:w-48 lg:w-[200px] max-w-[200px] dark:text-zinc-200"
-                          >
-                            {{ product.name }}
-                          </p>
-                        </div>
                       </div>
 
-                      <div class="flex flex-col items-end justify-between">
+                      <!-- Product Description -->
+                      <div class="w-full">
+                        <p
+                          class="font-bold text-xs text-primary-500"
+                          v-if="
+                            (product.qty_available ?? 0) < 4 &&
+                            product.type === ProductType.storableProduct
+                          "
+                        >
+                          <span>
+                            {{ $t("general.shopping_remainder") }}
+                          </span>
+                          {{ product.qty_available }}
+                        </p>
+                        <p
+                          class="text-sm line-clamp-2 text-gray-500 text-ellipsis overflow-hidden dark:text-zinc-200"
+                        >
+                          {{ product.name }}
+                        </p>
                         <!-- Price -->
-                        <div class="font-semibold text-sm flex gap-1 mb-2">
-                          <p>
-                            {{ product.quantity }}
-                          </p>
-                          <p>x</p>
-                          <p>
+                        <div class="flex justify-between mt-2">
+                          <p class="font-medium text-sm">
                             {{ currencyFormat(product.standard_price ?? 0) }}
                           </p>
-                        </div>
 
-                        <!-- Quantity -->
-                        <ProductInputQty
-                          :stock-available="product.qty_available || 0"
-                          :qty="product.quantity"
-                          :reduce-trash="true"
-                          @add:item="(value) => addToCart(product, value)"
-                          @reduce:item="(value) => addToCart(product, value)"
-                          @remote:item="
-                            removeFromCart(
-                              product.id!,
-                              subCategoryItem.subCategory,
-                              categoryItem.category
-                            )
-                          "
-                        />
+                          <ProductInputQty
+                            :stock-available="product.qty_available || 0"
+                            :qty="product.quantity"
+                            :reduce-trash="true"
+                            @add:item="(value) => addToCart(product, value)"
+                            @reduce:item="(value) => addToCart(product, value)"
+                            @remove:item="
+                              removeFromCart(
+                                product.id!,
+                                subCategoryItem.subCategory,
+                                categoryItem.category
+                              )
+                            "
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
+
+                  <UDivider
+                    v-if="
+                      !isLastIndex(categoryItem.subCategories, subCategoryIndex)
+                    "
+                  />
                 </div>
               </div>
-            </div>
+            </template>
 
             <template v-else>
               <div class="mx-4 mt-4 md:mt-10">
@@ -187,16 +189,21 @@ const checkOut = () => {
           </main>
 
           <div
-            class="p-4 border-t-[1px] dark:border-zinc-800"
+            class="p-4 border-t dark:border-zinc-800"
             v-if="sortedCart.length > 0"
           >
-            <div class="mb-4 flex justify-between items-end">
-              <p class="text-base">Total</p>
-              <p class="text-base font-semibold">
-                {{ currencyFormat(totalPrice) }}
-              </p>
+            <div class="flex flex-col gap-3">
+              <h2 class="text-base font-semibold">Ringkasan Belanja</h2>
+              <div>
+                <div class="mb-4 flex justify-between items-end">
+                  <p class="text-base">Total</p>
+                  <p class="text-base font-semibold">
+                    {{ currencyFormat(totalPrice) }}
+                  </p>
+                </div>
+                <UButton label="Checkout" size="lg" block @click="checkOut()" />
+              </div>
             </div>
-            <UButton label="Checkout" size="lg" block @click="checkOut()" />
           </div>
         </div>
       </template>

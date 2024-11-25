@@ -43,11 +43,11 @@ export const useAuth = () => {
     }
   };
 
-  function signOut() {
+  const signOut = () => {
     token.value = undefined;
 
     sessionStorage.removeItem("current-user");
-  }
+  };
 
   return {
     user,

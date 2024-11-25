@@ -34,14 +34,16 @@ const toProductDetail = (productSlug?: string) => {
 </script>
 
 <template>
-  <div class="flex gap-3">
-    <div class="hidden lg:flex lg:w-3/12">
+  <div class="grid grid-cols-4 gap-4 mb-16">
+    <!-- Sticky Sidebar -->
+    <aside class="col-span-1 sticky top-80 z-10 hidden lg:block">
       <ProductCategoryFilter />
-    </div>
-    <div class="w-full flex flex-col gap-3 lg:w-9/12">
-      <!--  -->
+    </aside>
+
+    <!-- Scrollable Content -->
+    <section class="col-span-4 lg:col-span-3 flex flex-col gap-3">
       <div
-        class="flex flex-col gap-2 md:flex-row md:justify-between md:items-center"
+        class="flex flex-col gap-3 md:flex-row md:justify-between md:items-end"
       >
         <div class="flex flex-row">
           <div
@@ -96,10 +98,11 @@ const toProductDetail = (productSlug?: string) => {
       <!-- Products by Category -->
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
         <UiProductCard
-          v-for="(product, index) in productsData?.data?.product_list"
+          v-for="product in productsData?.data?.product_list"
           :title="product?.name"
           :subtitle="changeProductType(product?.type)"
           :price="product?.standard_price"
+          :image="product?.attachment_ids"
           @to="toProductDetail(product?.url_slug)"
         />
       </div>
@@ -111,6 +114,6 @@ const toProductDetail = (productSlug?: string) => {
           :total="productsData?.data?.total_data ?? 100"
         />
       </div>
-    </div>
+    </section>
   </div>
 </template>

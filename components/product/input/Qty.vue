@@ -1,24 +1,22 @@
 <script setup lang="ts">
-const props = defineProps({
-  stockAvailable: {
-    type: Number,
-    required: true,
-  },
-  qty: {
-    type: Number,
-  },
-  reduceTrash: {
-    type: Boolean,
-  },
-});
+import type { ButtonColor, ButtonSize } from "#ui/types";
 
-const qty = ref<number>(props.qty || 1);
+const props = defineProps<{
+  stockAvailable: number;
+  qty?: number;
+  reduceTrash?: boolean;
+  size?: ButtonSize;
+  color?: ButtonColor;
+  block?: boolean;
+}>();
+
+const qty = ref<number>(props.qty || 0);
 
 const disabledAddQty = ref<boolean>(false);
 
 const emit = defineEmits([
   "update:qty",
-  "remote:item",
+  "remove:item",
   "add:item",
   "reduce:item",
 ]);
@@ -35,10 +33,12 @@ const reduceQty = () => {
 
   emit("reduce:item", qty.value);
 };
-const removeQty = () => emit("remote:item");
+const removeQty = () => emit("remove:item");
+
+const stockAvailableUpdate = ref<number>(0);
 
 onMounted(() => {
-  disabledAddQty.value = qty.value > props.stockAvailable ? true : false;
+  disabledAddQty.value = qty.value >= stockAvailableUpdate.value ? true : false;
 });
 
 watch(qty, (newQty) => {
@@ -47,10 +47,33 @@ watch(qty, (newQty) => {
     qty.value = 0;
   }
 
-  disabledAddQty.value = qty.value >= props.stockAvailable ? true : false;
+  disabledAddQty.value = qty.value >= stockAvailableUpdate.value ? true : false;
 
   emit("update:qty", qty.value);
 });
+
+watch(
+  () => props.qty,
+  (newValue) => {
+    qty.value = isNaN(newValue ?? 0) ? 0 : newValue!;
+  },
+  {
+    immediate: true,
+  }
+);
+
+watch(
+  () => props.stockAvailable,
+  (newValue) => {
+    stockAvailableUpdate.value = newValue;
+
+    disabledAddQty.value =
+      qty.value >= stockAvailableUpdate.value ? true : false;
+  },
+  {
+    immediate: true,
+  }
+);
 </script>
 
 <template>
@@ -62,8 +85,11 @@ watch(qty, (newQty) => {
       base: 'text-center',
       icon: { leading: { pointer: '' }, trailing: { pointer: '' } },
     }"
-    class="w-28 text-center"
+    class="text-center"
     type="number"
+    disabled
+    :size="props.size"
+    :class="props.block ? 'w-full' : 'w-28'"
   >
     <template #leading>
       <!-- Remove Item -->

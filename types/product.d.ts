@@ -57,9 +57,17 @@ interface Product {
   addedAt: Date | string | null; // Null safety dan handling string
   checked: boolean;
   url_product?: string;
+  attachment_ids?: ProductAttachment[];
 }
 
 interface ProductData {
   total_data?: number;
   product_list?: Product[];
+}
+
+interface ProductAttachment {
+  attachment_id?: number;
+  attachment_name?: string;
+  attachment_url?: string;
+  attachment_mimetype?: string;
 }

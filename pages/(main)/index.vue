@@ -1,7 +1,16 @@
+<script setup lang="ts">
+definePageMeta({
+  layout: false,
+});
+</script>
+
 <template>
-  <div class="py-5">
-    <LandingBanner />
-    <LandingListMenu />
-    <LandingContent />
-  </div>
+  <NuxtLayout name="default" padded>
+    <!-- <LandingHero /> -->
+    <UContainer class="min-h-screen py-5">
+      <LandingBanner />
+      <LandingListMenu />
+      <LandingContent />
+    </UContainer>
+  </NuxtLayout>
 </template>

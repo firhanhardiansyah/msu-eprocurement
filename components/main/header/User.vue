@@ -88,7 +88,7 @@ const userPageLink = computed(() => [
                   {
                     label: 'Keluar',
                     icon: 'i-heroicons-arrow-right-start-on-rectangle',
-                    click: () => signOut(),
+                    click: signOut,
                   },
                 ],
               ]"
