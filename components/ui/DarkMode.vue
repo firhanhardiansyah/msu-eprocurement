@@ -31,5 +31,14 @@ watch(isDark, () => {
         <div class="w-8 h-8" />
       </template>
     </UTooltip>
+
+    <template #fallback>
+      <UButton
+        icon="i-heroicons-sun-20-solid"
+        color="gray"
+        disabled
+        aria-label="Theme"
+      />
+    </template>
   </ClientOnly>
 </template>

@@ -88,6 +88,7 @@ watch(
     class="text-center"
     type="number"
     disabled
+    :color="disabledAddQty ? 'gray' : 'white'"
     :size="props.size"
     :class="props.block ? 'w-full' : 'w-28'"
   >

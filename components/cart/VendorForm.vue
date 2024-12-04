@@ -12,71 +12,67 @@ const { isMobile } = useHelper();
 import type { FormSubmitEvent } from "#ui/types";
 import { object, type InferType } from "yup";
 
-interface FormState {
-  project?: GeneralResponse;
-  vendor?: GeneralResponse;
-  unit_price?: string;
-  qty?: string;
-  total_price?: string;
-  estimate_price?: string;
-  location?: GeneralResponse;
-  category?: GeneralResponse;
-  unit?: GeneralResponse;
-  type?: GeneralResponse;
-  department?: GeneralResponse;
-}
-
-const schema = object<FormState>({
-  location: object().required("Please select a location."),
-  category: object().required("Please select a category."),
-  unit: object().required("Please select a unit."),
-  type: object().required("Please select a type."),
-  department: object().required("Please select a department."),
+const schema = object<ProductFormState>({
+  analytic_location: object().required("Please select an analytic location."),
+  analytic_category: object().required("Please select an analytic category."),
+  analytic_unit: object().required("Please select an analytic unit."),
+  analytic_type: object().required("Please select an analytic type."),
+  analytic_department: object().required(
+    "Please select an analytic department."
+  ),
 });
 
-type Schema = InferType<typeof schema>;
-
-const state: FormState = reactive({
-  project: undefined,
+const state: ProductFormState = reactive({
+  product: undefined,
   vendor: undefined,
   unit_price: undefined,
   qty: undefined,
   total_price: undefined,
-  estimate_price: undefined,
-  location: undefined,
-  category: undefined,
-  unit: undefined,
-  type: undefined,
-  department: undefined,
+  analytic_project: undefined,
+  analytic_location: undefined,
+  analytic_category: undefined,
+  analytic_unit: undefined,
+  analytic_type: undefined,
+  analytic_department: undefined,
 });
 
-const onSubmit = async (event: FormSubmitEvent<Schema>) => {
-  // Do something with event.data
-  console.log(event.data);
-};
+const unitPriceFormatted = computed({
+  get(): string {
+    return currencyFormat(state.unit_price || 0);
+  },
+  set(value: string) {
+    state.unit_price = currencyParse(value) || 0;
+  },
+});
+const totalPriceFormatted = computed({
+  get(): string {
+    return currencyFormat(state.total_price || 0);
+  },
+  set(value: string) {
+    state.total_price = currencyParse(value) || 0;
+  },
+});
 
 const { getSelectionData } = usePurchaseRequisition();
 
-const stockAvailable = ref<number>(0);
-
 // Analytic Account Selection
-const projectLoading = ref(false);
-const projectSelected = ref<GeneralResponse[]>([]);
+const analitycProjectLoading = ref(false);
+const analitycProjectSelected = ref<GeneralResponse>();
 
-const projectSearch = async (q: string) => {
-  projectLoading.value = true;
+const analitycProjectSearch = async (q: string) => {
+  analitycProjectLoading.value = true;
 
   const response = await getSelectionData(SelectionType.AnalyticAccount, q);
   const data = response?.data?.analytic_account_ids ?? [];
 
-  projectLoading.value = false;
+  analitycProjectLoading.value = false;
   return data;
 };
 
 // Vendor Selection
-const vendorSelected = ref<GeneralResponse>();
+const vendorSelected = ref<ProductVendor>();
 
-const vendorList = computed(() =>
+const vendorList = computed<ProductVendor[] | undefined>(() =>
   props.product?.seller_ids?.map((value) => {
     return {
       id: value.id,
@@ -86,11 +82,13 @@ const vendorList = computed(() =>
   })
 );
 
-const vendorChanged = (value: any) => {
-  state.unit_price = currencyFormat(value.price);
-  state.total_price = currencyFormat(value.price);
+const stockAvailable = ref<number>(0);
 
-  state.qty = "1";
+const vendorChanged = (value: ProductVendor | undefined) => {
+  unitPriceFormatted.value = currencyFormat(value?.price ?? 0);
+
+  state.qty = 1;
+  state.total_price = (state.unit_price ?? 0) * state.qty;
 
   // Max Stock
   stockAvailable.value = 999;
@@ -102,80 +100,175 @@ const vendorChanged = (value: any) => {
 const qtyChanged = (qty: any) => {
   state.qty = qty;
 
-  const total = qty * parseCurrency(state.unit_price);
-
-  state.total_price = currencyFormat(total);
+  state.total_price = (state.unit_price ?? 0) * (state.qty ?? 0);
 };
 
 // Analytic Location Selection
-const locationLoading = ref(false);
-const locationSelected = ref<GeneralResponse>();
+const analitycLocationLoading = ref(false);
+const analitycLocationSelected = ref<GeneralResponse>();
 
-const locationSearch = async (q: string) => {
-  locationLoading.value = true;
+const analitycLocationSearch = async (q: string) => {
+  analitycLocationLoading.value = true;
 
   const response = await getSelectionData(SelectionType.AnalyticLocation, q);
+
   const data = response?.data?.analytic_location_ids ?? [];
 
-  locationLoading.value = false;
+  analitycLocationLoading.value = false;
   return data;
 };
 
 // Analytic Category Selection
-const categoryLoading = ref(false);
-const categorySelected = ref<GeneralResponse>();
+const analitycCategoryLoading = ref(false);
+const analitycCategorySelected = ref<GeneralResponse>();
 
-const categorySearch = async (q: string) => {
-  categoryLoading.value = true;
+const analitycCategorySearch = async (q: string) => {
+  analitycCategoryLoading.value = true;
 
   const response = await getSelectionData(SelectionType.AnalyticCategory, q);
   const data = response?.data?.analytic_category_ids ?? [];
 
-  categoryLoading.value = false;
+  analitycCategoryLoading.value = false;
   return data;
 };
 
 // Analytic Unit Selection
-const unitLoading = ref(false);
-const unitSelected = ref<GeneralResponse>();
+const analyticUnitLoading = ref(false);
+const analyticUnitSelected = ref<GeneralResponse>();
 
-const unitSearch = async (q: string) => {
-  unitLoading.value = true;
+const analyticUnitSearch = async (q: string) => {
+  analyticUnitLoading.value = true;
 
   const response = await getSelectionData(SelectionType.AnalyticUnit, q);
   const data = response?.data?.analytic_unit_ids ?? [];
 
-  unitLoading.value = false;
+  analyticUnitLoading.value = false;
   return data;
 };
 
 // Analytic Type Selection
-const typeLoading = ref(false);
-const typeSelected = ref<GeneralResponse>();
+const analyticTypeLoading = ref(false);
+const analyticTypeSelected = ref<GeneralResponse>();
 
-const typeSearch = async (q: string) => {
-  typeLoading.value = true;
+const analyticTypeSearch = async (q: string) => {
+  analyticTypeLoading.value = true;
 
   const response = await getSelectionData(SelectionType.AnalyticType, q);
   const data = response?.data?.analytic_type_ids ?? [];
 
-  typeLoading.value = false;
+  analyticTypeLoading.value = false;
   return data;
 };
 
 // Analytic Department Selection
-const departmentLoading = ref(false);
-const departmentSelected = ref<GeneralResponse>();
+const analyticDepartmentLoading = ref(false);
+const analyticDepartmentSelected = ref<GeneralResponse>();
 
-const departmentSearch = async (q: string) => {
-  departmentLoading.value = true;
+const analyticDepartmentSearch = async (q: string) => {
+  analyticDepartmentLoading.value = true;
 
   const response = await getSelectionData(SelectionType.AnalyticDepartment, q);
   const data = response?.data?.analytic_department_ids ?? [];
 
-  departmentLoading.value = false;
+  analyticDepartmentLoading.value = false;
   return data;
 };
+
+const { onAddToCart } = useCartNew();
+
+type Schema = InferType<typeof schema>;
+
+const onSubmit = (event: FormSubmitEvent<Schema>): void => {
+  state.product = props.product;
+
+  // Add to cart
+  onAddToCart(event.data);
+
+  emits("close");
+};
+
+const developMode = ref<boolean>(!false);
+
+// Test;
+onMounted(() => {
+  if (developMode.value) {
+    // Analytics Project Test
+    analitycProjectSearch("").then((data) => {
+      analitycProjectSelected.value = {
+        id: data[0].id,
+        name: data[0].name,
+      };
+
+      state.analytic_project = analitycProjectSelected.value;
+    });
+
+    // Vendor Test
+    if (props.product?.seller_ids?.length !== 0) {
+      const vendorSelectedTest = {
+        id: props.product!.seller_ids![0].id,
+        name: props.product!.seller_ids![0].partner_id?.name,
+        price: props.product!.seller_ids![0].price,
+      };
+
+      vendorSelected.value = {
+        id: props.product!.seller_ids![0].id,
+        name: props.product!.seller_ids![0].partner_id?.name,
+      };
+
+      vendorChanged(vendorSelectedTest);
+    }
+
+    // Location
+    analitycLocationSearch("").then((data) => {
+      analitycLocationSelected.value = {
+        id: data[0].id,
+        name: data[0].name,
+      };
+
+      state.analytic_location = analitycLocationSelected.value;
+    });
+
+    // Category
+    analitycCategorySearch("").then((data) => {
+      analitycCategorySelected.value = {
+        id: data[0].id,
+        name: data[0].name,
+      };
+
+      state.analytic_category = analitycCategorySelected.value;
+    });
+
+    // Unit
+    analyticUnitSearch("").then((data) => {
+      analyticUnitSelected.value = {
+        id: data[0].id,
+        name: data[0].name,
+      };
+
+      state.analytic_unit = analyticUnitSelected.value;
+    });
+
+    // Type
+    analyticTypeSearch("").then((data) => {
+      analyticTypeSelected.value = {
+        id: data[0].id,
+        name: data[0].name,
+      };
+
+      state.analytic_type = analyticTypeSelected.value;
+    });
+
+    // Department
+    analyticDepartmentSearch("").then((data) => {
+      analyticDepartmentSelected.value = {
+        id: data[0].id,
+        name: data[0].name,
+      };
+
+      state.analytic_department = analyticDepartmentSelected.value;
+    });
+  }
+});
 </script>
 
 <template>
@@ -215,20 +308,20 @@ const departmentSearch = async (q: string) => {
       >
         <div class="grid grid-cols-12 gap-3">
           <UFormGroup
-            label="Project"
-            name="project"
+            name="analytict_project"
+            label="Analytic Project"
             class="col-span-12"
             required
           >
             <USelectMenu
-              v-model="projectSelected"
-              :loading="projectLoading"
-              :searchable="projectSearch"
-              placeholder="Search for a project..."
+              v-model="analitycProjectSelected"
+              :loading="analitycProjectLoading"
+              :searchable="analitycProjectSearch"
+              placeholder="Search for analytic project"
               trailing
               option-attribute="name"
               by="id"
-              @change="state.project = projectSelected"
+              @change="state.analytic_project = analitycProjectSelected"
             />
           </UFormGroup>
 
@@ -236,16 +329,21 @@ const departmentSearch = async (q: string) => {
             <USelectMenu
               v-model="vendorSelected"
               :options="vendorList"
-              placeholder="Select a vendor"
+              placeholder="Choose the right vendor"
               searchable
-              searchable-placeholder="Search a vendor..."
+              searchable-placeholder="Search vendor..."
               option-attribute="name"
               by="id"
               @change="vendorChanged"
             />
           </UFormGroup>
           <UFormGroup label="Unit Price" name="unit_price" class="col-span-8">
-            <UInput disabled color="gray" v-model="state.unit_price" />
+            <UInput
+              disabled
+              color="gray"
+              v-model="unitPriceFormatted"
+              placeholder="Unit price based on selected vendor"
+            />
           </UFormGroup>
 
           <UFormGroup label="Qty" name="qty" class="col-span-4">
@@ -273,20 +371,20 @@ const departmentSearch = async (q: string) => {
           <UDivider class="col-span-12" />
 
           <UFormGroup
-            label="Location"
+            label="Analytic Location"
             class="col-span-6"
-            name="location"
+            name="analytic_location"
             required
           >
             <USelectMenu
-              v-model="locationSelected"
-              :loading="locationLoading"
-              :searchable="locationSearch"
-              placeholder="Search for a location..."
+              v-model="analitycLocationSelected"
+              :loading="analitycLocationLoading"
+              :searchable="analitycLocationSearch"
+              placeholder="Select analytic location"
               trailing
               option-attribute="name"
               by="id"
-              @change="state.location = locationSelected"
+              @change="state.analytic_location = analitycLocationSelected"
               :disabled="vendorSelected == null"
               :color="vendorSelected == null ? 'gray' : 'white'"
               :popper="{ placement: isMobile ? 'top-start' : 'bottom-start' }"
@@ -294,71 +392,81 @@ const departmentSearch = async (q: string) => {
           </UFormGroup>
 
           <UFormGroup
-            label="Category"
+            label="Analytic Category"
             class="col-span-6"
-            name="category"
+            name="analytic_category"
             required
           >
             <USelectMenu
-              v-model="categorySelected"
-              :loading="categoryLoading"
-              :searchable="categorySearch"
-              placeholder="Search category"
+              v-model="analitycCategorySelected"
+              :loading="analitycCategoryLoading"
+              :searchable="analitycCategorySearch"
+              placeholder="Search analytic category"
               trailing
               option-attribute="name"
               by="id"
-              @change="state.category = categorySelected"
+              @change="state.analytic_category = analitycCategorySelected"
               :disabled="vendorSelected == null"
               :color="vendorSelected == null ? 'gray' : 'white'"
               :popper="{ placement: isMobile ? 'top-start' : 'bottom-start' }"
             />
           </UFormGroup>
 
-          <UFormGroup label="Unit" class="col-span-6" name="unit" required>
+          <UFormGroup
+            label="Analytic Unit"
+            class="col-span-6"
+            name="analytic_unit"
+            required
+          >
             <USelectMenu
-              v-model="unitSelected"
-              :loading="unitLoading"
-              :searchable="unitSearch"
-              placeholder="Search unit"
+              v-model="analyticUnitSelected"
+              :loading="analyticUnitLoading"
+              :searchable="analyticUnitSearch"
+              placeholder="Search analytic unit"
               trailing
               option-attribute="name"
               by="id"
-              @change="state.unit = unitSelected"
-              :disabled="vendorSelected == null"
-              :color="vendorSelected == null ? 'gray' : 'white'"
-              :popper="{ placement: isMobile ? 'top-start' : 'bottom-start' }"
-            />
-          </UFormGroup>
-          <UFormGroup label="Type" class="col-span-6" name="type" required>
-            <USelectMenu
-              v-model="typeSelected"
-              :loading="typeLoading"
-              :searchable="typeSearch"
-              placeholder="Search type"
-              trailing
-              option-attribute="name"
-              by="id"
-              @change="state.type = typeSelected"
+              @change="state.analytic_unit = analyticUnitSelected"
               :disabled="vendorSelected == null"
               :color="vendorSelected == null ? 'gray' : 'white'"
               :popper="{ placement: isMobile ? 'top-start' : 'bottom-start' }"
             />
           </UFormGroup>
           <UFormGroup
-            label="Department"
+            label="Analytic Type"
+            class="col-span-6"
+            name="analytic_type"
+            required
+          >
+            <USelectMenu
+              v-model="analyticTypeSelected"
+              :loading="analyticTypeLoading"
+              :searchable="analyticTypeSearch"
+              placeholder="Search analytic type"
+              trailing
+              option-attribute="name"
+              by="id"
+              @change="state.analytic_type = analyticTypeSelected"
+              :disabled="vendorSelected == null"
+              :color="vendorSelected == null ? 'gray' : 'white'"
+              :popper="{ placement: isMobile ? 'top-start' : 'bottom-start' }"
+            />
+          </UFormGroup>
+          <UFormGroup
+            label="Analytic Department"
             class="col-span-12"
-            name="department"
+            name="analytic_department"
             required
           >
             <USelectMenu
-              v-model="departmentSelected"
-              :loading="departmentLoading"
-              :searchable="departmentSearch"
-              placeholder="Search department"
+              v-model="analyticDepartmentSelected"
+              :loading="analyticDepartmentLoading"
+              :searchable="analyticDepartmentSearch"
+              placeholder="Search analytic department"
               trailing
               option-attribute="name"
               by="id"
-              @change="state.department = departmentSelected"
+              @change="state.analytic_department = analyticDepartmentSelected"
               :disabled="vendorSelected == null"
               :color="vendorSelected == null ? 'gray' : 'white'"
               :popper="{ placement: isMobile ? 'top-start' : 'bottom-start' }"
@@ -371,16 +479,18 @@ const departmentSearch = async (q: string) => {
           <div>
             <div class="flex justify-between items-center">
               <p class="text-sm text-gray-500">Qty</p>
-              <p class="text-base">
-                <span v-if="state.qty != undefined">{{ state.qty }} Item</span>
+              <p class="text-sm">
+                <span v-if="state.qty != undefined"
+                  >{{ state.qty }} {{ props.product?.uom_id?.name }}</span
+                >
                 <span v-else> - </span>
               </p>
             </div>
             <div class="flex justify-between items-center">
               <p class="text-sm text-gray-500">Unit Price</p>
-              <p class="text-base">
-                <span v-if="state.unit_price != undefined">
-                  {{ state.unit_price }}
+              <p class="text-sm">
+                <span v-if="unitPriceFormatted != undefined">
+                  {{ unitPriceFormatted }}
                 </span>
                 <span v-else> {{ currencyFormat(0) }} </span>
               </p>
@@ -388,12 +498,12 @@ const departmentSearch = async (q: string) => {
           </div>
           <UDivider />
           <div class="flex justify-between items-center">
-            <p class="text-base text-gray-900 dark:text-gray-200">
+            <p class="text-base font-medium text-gray-900 dark:text-gray-200">
               Total Price
             </p>
             <p class="font-bold text-lg">
-              <span v-if="state.total_price != undefined">
-                {{ state.total_price }}
+              <span v-if="totalPriceFormatted != undefined">
+                {{ totalPriceFormatted }}
               </span>
               <span v-else> {{ currencyFormat(0) }} </span>
             </p>

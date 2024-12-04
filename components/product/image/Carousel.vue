@@ -70,6 +70,7 @@ productImage.value = getFirstElement<ProductAttachment>(
             :class="[
               carouselRef?.page == index + 1 && 'border-2 border-primary',
             ]"
+            alt="Image Product Detail"
             @click="onChangeImgProduct(index)"
           />
         </div>

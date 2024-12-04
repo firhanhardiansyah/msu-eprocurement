@@ -6,7 +6,12 @@ const { links } = useNavbar();
 
 <template>
   <div class="flex lg:hidden">
-    <UButton icon="i-heroicons-bars-3" color="gray" @click="isOpen = true" />
+    <UButton
+      icon="i-heroicons-bars-3"
+      color="gray"
+      @click="isOpen = true"
+      aria-label="Open Menu"
+    />
 
     <USlideover v-model="isOpen">
       <UCard class="flex flex-col flex-1">
@@ -23,6 +28,7 @@ const { links } = useNavbar();
               icon="i-heroicons-x-mark-20-solid"
               class="-my-1"
               @click="isOpen = false"
+              aria-label="Close Menu"
             />
           </div>
         </template>

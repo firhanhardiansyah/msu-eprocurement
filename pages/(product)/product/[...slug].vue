@@ -108,9 +108,6 @@ const subTotal = computed(() => {
   return currencyFormat(qtyProduct.value * amount);
 });
 
-// Cart
-const { addToCart } = useCart();
-
 // Device
 const { isMobile, isTablet, isDesktop } = useHelper();
 </script>

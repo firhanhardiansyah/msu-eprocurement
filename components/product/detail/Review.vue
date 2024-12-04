@@ -10,7 +10,7 @@ const props = defineProps<{
       <UContainer class="container mx-auto py-4">
         <div class="flex items-center justify-between mb-2">
           <div class="text-lg font-bold">Ulasan Produk</div>
-          <UButton variant="ghost" label="Lihat Semua" :padded="false" />
+          <UButton variant="ghost" label="Lihat Semua" />
         </div>
 
         <div class="flex items-center gap-2">
@@ -21,7 +21,7 @@ const props = defineProps<{
           />
           <p>
             <span class="text-lg font-bold mr-1">5.0</span>
-            <span class="text-xs text-gray-500"
+            <span class="text-xs text-gray-500 dark:text-gray-200"
               >dari 321 rating • 190 ulasan</span
             >
           </p>

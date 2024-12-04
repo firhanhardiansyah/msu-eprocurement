@@ -7,6 +7,7 @@ interface PurchaseRequisition {
   analytic_type_ids?: GeneralResponse[];
   analytic_department_ids?: GeneralResponse[];
   company_ids?: GeneralResponse[];
+  warehouse_ids?: GeneralResponse[];
   picking_type_ids?: GeneralResponse[];
   kriteria_rfq_ids?: GeneralResponse[];
 }

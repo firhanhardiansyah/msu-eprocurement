@@ -1,5 +1,95 @@
 <script setup lang="ts">
-const { cartShipment } = useShipment();
+const { checkoutItems, getCheckedProducts } = useCartNew();
+
+const columns = [
+  {
+    key: "name",
+    label: "Name",
+    sortable: true,
+  },
+  {
+    key: "vendor",
+    label: "Vendor",
+    sortable: true,
+  },
+  {
+    key: "unit_price",
+    label: "Unit Price",
+    sortable: true,
+  },
+  {
+    key: "qty",
+    label: "Qty",
+    sortable: true,
+  },
+  {
+    key: "analytic_project",
+    label: "Analytic Project",
+    sortable: true,
+  },
+  {
+    key: "analytic_location",
+    label: "Analytic Location",
+    sortable: true,
+  },
+  {
+    key: "analytic_category",
+    label: "Analytic Category",
+    sortable: true,
+  },
+  {
+    key: "analytic_unit",
+    label: "Analytic Unit",
+    sortable: true,
+  },
+  {
+    key: "analytic_type",
+    label: "Analytic Type",
+    sortable: true,
+  },
+  {
+    key: "analytic_department",
+    label: "Analytic Department",
+    sortable: true,
+  },
+];
+
+const checkOutProducts = computed<CheckoutProductItem[]>({
+  set: () => {},
+  get: (_) => {
+    const products = getCheckedProducts(checkoutItems.value);
+
+    return products.map((item: ProductFormState) => {
+      return {
+        id: item.product?.id,
+        name: item.product?.name,
+        analytic_project: item.analytic_project?.name,
+        vendor: item.vendor?.name,
+        unit_price: currencyFormat(item.unit_price ?? 0),
+        qty: `${item.qty} ${item.product?.uom_id?.name}`,
+        analytic_location: item.analytic_location?.name,
+        analytic_category: item.analytic_category?.name,
+        analytic_unit: item.analytic_unit?.name,
+        analytic_type: item.analytic_type?.name,
+        analytic_department: item.analytic_department?.name,
+      };
+    });
+  },
+});
+
+const q = ref("");
+
+const filteredRows = computed(() => {
+  if (!q.value) {
+    return checkOutProducts.value;
+  }
+
+  return checkOutProducts.value.filter((product) =>
+    Object.values(product).some((value) =>
+      String(value).toLowerCase().includes(q.value.toLowerCase())
+    )
+  );
+});
 </script>
 
 <template>
@@ -16,48 +106,25 @@ const { cartShipment } = useShipment();
       divide: '',
     }"
   >
-    <template #header>
-      <div class="px-4 pt-3">
-        <p class="text-base font-semibold">
-          {{ cartShipment?.subCategory }}
-        </p>
-      </div>
-    </template>
-
     <template #default>
-      <template v-for="(product, index) in cartShipment?.products">
-        <div class="flex gap-4 px-4 py-3 sm:px-6">
-          <!-- Image -->
-          <div class="bg-gray-300 h-16 w-16 rounded-md" />
-
-          <div class="flex-1 flex flex-col lg:flex-row lg:justify-between">
-            <!-- Product Name -->
-            <NuxtLink :to="product?.url_product">
-              <p
-                class="text-sm text-zinc-900 dark:text-zinc-300 cursor-pointer"
-              >
-                {{ product?.name }}
-              </p>
-              <div class="flex flex-wrap gap-1 mt-2">
-                <UBadge
-                  v-for="purchase in product?.seller_ids"
-                  :label="purchase?.partner_id?.name"
-                  variant="outline"
-                />
-              </div>
-            </NuxtLink>
-
-            <!-- Price -->
-            <p class="text-base font-semibold flex gap-1">
-              <span>
-                {{ product.quantity }}
-              </span>
-              <span>x</span>
-              {{ currencyFormat(product?.standard_price || 0) }}
-            </p>
-          </div>
+      <div>
+        <div
+          class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700"
+        >
+          <UInput v-model="q" placeholder="Search..." size="sm" />
         </div>
-      </template>
+        <UTable
+          :loading="filteredRows.length === 0"
+          :loading-state="{
+            icon: 'i-heroicons-arrow-path-20-solid',
+            label: 'Loading...',
+          }"
+          :progress="{ color: 'primary', animation: 'carousel' }"
+          :sort="{ column: 'name', direction: 'asc' }"
+          :rows="filteredRows"
+          :columns="columns"
+        />
+      </div>
     </template>
   </UCard>
 </template>

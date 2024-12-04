@@ -43,5 +43,11 @@ export const usePurchaseRequisition = () => {
     return { vendors, status, error, refresh, clear };
   };
 
-  return { getSelectionData, getVendors };
+  const cretePR = async (request: any) =>
+    $apiAuthorized<ApiResponseGeneric<GeneralResponse>>(`/ecatalog/checkout`, {
+      method: "POST",
+      body: request,
+    });
+
+  return { getSelectionData, getVendors, cretePR };
 };

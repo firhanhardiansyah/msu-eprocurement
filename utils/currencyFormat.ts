@@ -23,7 +23,7 @@ export function currencyFormat(
     .replace(/\s+/, "");
 }
 
-export function parseCurrency(currency: string | null | undefined): number {
+export function currencyParse(currency: string | null | undefined): number {
   if (currency === null || currency === undefined) {
     return 0; // Nilai default jika input null atau undefined
   }

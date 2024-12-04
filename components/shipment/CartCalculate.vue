@@ -1,5 +1,9 @@
 <script setup lang="js">
-const { totalShoppingProducts, totalShoppingPrice, totalPriceOfAllPurchases } = useShipment();
+const { checkoutItems,  calculateTotalPrice, getCheckedProducts } = useCartNew();
+
+
+const products =  computed(() => getCheckedProducts(checkoutItems.value));
+const totalPrice = computed(() => calculateTotalPrice(products.value));
 </script>
 
 <template>
@@ -28,17 +32,15 @@ const { totalShoppingProducts, totalShoppingPrice, totalPriceOfAllPurchases } = 
         >
           <p>
             {{ $t("general.total_price") }}
-            <span>
-              ( {{ totalShoppingProducts }} {{ $t("general.product") }} )
-            </span>
+            <span> ( {{ products.length }} {{ $t("general.product") }} ) </span>
           </p>
-          <p>{{ currencyFormat(totalShoppingPrice) }}</p>
+          <p>{{ currencyFormat(totalPrice) }}</p>
         </div>
         <UDivider class="py-3" />
         <div class="text-sm flex justify-between">
           <p>{{ $t("general.total_shopping") }}</p>
           <p class="font-bold">
-            {{ currencyFormat(totalPriceOfAllPurchases) }}
+            {{ currencyFormat(totalPrice) }}
           </p>
         </div>
       </div>

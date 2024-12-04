@@ -37,7 +37,7 @@ const rows = computed(() => {
       uom: item?.product_uom?.name,
       price: currencyFormat(item?.price ?? 0),
       delivery_lead_time: item?.delay,
-      location: "California",
+      location: "-",
     };
   });
 });

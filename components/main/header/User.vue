@@ -48,7 +48,11 @@ const userPageLink = computed(() => [
         placement: 'top-end',
       }"
     >
-      <UButton icon="i-heroicons-arrow-right-end-on-rectangle" color="gray" />
+      <UButton
+        icon="i-heroicons-arrow-right-end-on-rectangle"
+        color="gray"
+        aria-label="Authentication"
+      />
 
       <template #panel>
         <div class="py-2">
@@ -65,7 +69,11 @@ const userPageLink = computed(() => [
         placement: 'top-end',
       }"
     >
-      <UButton icon="i-heroicons-user-circle" color="gray" />
+      <UButton
+        icon="i-heroicons-user-circle"
+        color="gray"
+        aria-label="User Account"
+      />
 
       <template #panel>
         <div class="py-2">

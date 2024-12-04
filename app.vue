@@ -1,10 +1,10 @@
 <script setup lang="ts">
 const { loadSession } = useAuth();
-const { loadCart } = useCart();
+const { loadItemsInCart } = useCartNew();
 
 onMounted(() => {
   loadSession();
-  loadCart();
+  loadItemsInCart();
 });
 </script>
 

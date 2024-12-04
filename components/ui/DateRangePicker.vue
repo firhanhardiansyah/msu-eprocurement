@@ -1,21 +1,13 @@
 <script setup lang="ts">
-import type { ButtonColor, ButtonSize } from "#ui/types";
-
-const props = withDefaults(
-  defineProps<{
-    color?: ButtonColor;
-    size?: ButtonSize;
-    block?: boolean;
-  }>(),
-  {
-    color: "white" as ButtonColor,
-    size: "lg" as ButtonSize,
-  }
-);
+import { DatePicker as VCalendarDatePicker } from "v-calendar";
 
 import { format, isSameDay, sub, type Duration } from "date-fns";
 
-const emit = defineEmits(["update:model-value", "close"]);
+import type { DatePickerRangeObject } from "v-calendar/dist/types/src/use/datePicker.js";
+
+const emits = defineEmits(["update:model-value", "close"]);
+
+const dateRangeClose = ref<boolean>(false);
 
 const ranges = [
   { label: "Last 7 days", duration: { days: 7 } },
@@ -25,39 +17,99 @@ const ranges = [
   { label: "Last 6 months", duration: { months: 6 } },
   { label: "Last year", duration: { years: 1 } },
 ];
-const selected = ref({ start: sub(new Date(), { days: 14 }), end: new Date() });
 
-function isRangeSelected(duration: Duration) {
+const props = defineProps({
+  modelValue: {
+    type: [Object] as PropType<DatePickerRangeObject | undefined>,
+    // default: {
+    //   start: new Date(),
+    //   end: add(new Date(), { days: 1 }),
+    // },
+  },
+  placeholder: {
+    type: String,
+  },
+  error: {
+    type: Boolean,
+  },
+});
+
+const dateRange = computed({
+  get: () => props.modelValue,
+  set: (value) => {
+    emits("update:model-value", value);
+    emits("close");
+    dateRangeClose.value = true;
+
+    console.log("change daterange");
+  },
+});
+
+const isRangeSelected = (duration: Duration): boolean | undefined => {
+  if (props.modelValue === undefined) return undefined;
+
   return (
-    isSameDay(selected.value.start, sub(new Date(), duration)) &&
-    isSameDay(selected.value.end, new Date())
+    isSameDay(props.modelValue.start as Date, sub(new Date(), duration)) &&
+    isSameDay(props.modelValue.end as Date, new Date())
   );
+};
+
+const dateRangeFormat = (
+  date: DatePickerRangeObject | undefined
+): string | undefined => {
+  if (date === undefined) return props.placeholder;
+
+  const isSameMonth =
+    format(date.start as Date, "MMM y") === format(date.end as Date, "MMM y");
+
+  if (isSameMonth) {
+    return `${format(date.start as Date, "d MMM")} - ${format(
+      date.end as Date,
+      "d MMM y"
+    )}`;
+  }
+
+  return `${format(date.start as Date, "d MMM y")} - ${format(
+    date.end as Date,
+    "d MMM y"
+  )}`;
+};
+
+const attrs = {
+  transparent: true,
+  borderless: true,
+  color: "primary",
+  "is-dark": { selector: "html", darkClass: "dark" },
+  "first-day-of-week": 1,
+};
+
+function onDayClick(_: any, event: MouseEvent): void {
+  const target = event.target as HTMLElement;
+  target.blur();
 }
 
-function selectRange(duration: Duration) {
-  selected.value = { start: sub(new Date(), duration), end: new Date() };
-
-  emit("update:model-value", selected.value);
-}
-
-const selectedStart = format(selected.value.start, "d MMM, yyy");
-const selectedEnd = format(selected.value.end, "d MMM, yyy");
-
-const dateModel = ref(`${selectedStart} - ${selectedEnd}`);
+const dateRangeModel = computed(() => dateRangeFormat(dateRange.value));
 </script>
 
 <template>
   <UPopover :popper="{ placement: 'bottom-start' }">
-    <UButton
-      :size="props.size"
-      :color="props.color"
-      :label="dateModel"
-      :block="block"
+    <!-- <UButton
+      size="md"
+      color="white"
+      class="w-full"
+      :variant="props.error ? 'ghost' : 'solid'"
+      :class="[
+        !dateRange && 'text-gray-400',
+        props.error && 'border border-red-500',
+      ]"
       :ui="{
-        block: 'w-full justify-between items-start',
+        font: 'font-normal',
       }"
-      trailing-icon="i-heroicons-chevron-down-20-solid"
-    />
+    >
+      {{ dateRangeFormat(dateRange) }}
+    </UButton> -->
+
+    <UInput v-model="dateRangeModel" />
 
     <template #panel="{ close }">
       <div
@@ -77,26 +129,22 @@ const dateModel = ref(`${selectedStart} - ${selectedEnd}`);
                 : 'hover:bg-gray-50 dark:hover:bg-gray-800/50',
             ]"
             truncate
-            @click="selectRange(range.duration)"
           />
         </div>
 
-        <UiDatePicker
-          v-model="selected"
-          daterangepicker
-          @update:model-value="
-              (date: any) => {
-                console.log('date');
-                console.log(date);
-
-
-      const selectedStart = format(date.start, 'd MMM, yyy');
-      const selectedEnd = format(date.end, 'd MMM, yyy');
-
-                dateModel = `${selectedStart} - ${selectedEnd}`;
+        <VCalendarDatePicker
+          v-model.range="dateRange"
+          :columns="2"
+          v-bind="{ ...attrs, ...$attrs }"
+          @dayclick="onDayClick"
+          @click="
+            () => {
+              if (dateRangeClose) {
+                close();
               }
-            "
-          @close="close"
+              dateRangeClose = false;
+            }
+          "
         />
       </div>
     </template>
